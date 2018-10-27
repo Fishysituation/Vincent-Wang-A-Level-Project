@@ -1,4 +1,4 @@
-#Forex Trading With Deep Reinforcement Learning
+# Forex Trading With Deep Reinforcement Learning
 
 A level computing project
 

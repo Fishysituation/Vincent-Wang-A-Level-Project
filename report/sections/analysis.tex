@@ -1,0 +1,53 @@
+
+\iffalse
+Fully or nearly fully scoped analysis of a real problem, presented in a way that a third party can understand.
+
+Requirements fully documented in a set of measurable and appropriate specific objectives, covering all required functionality of the solution or areas of investigation.
+
+Requirements arrived at by considering, through dialogue, the needs of the intended users of the system, or recipients of the outcomes for investigative projects.
+
+Problem sufficiently well modelled to be of use in subsequent stages.		
+\fi
+
+
+\graphicspath{ {images/analysis/} }
+
+\part{Analysis}
+
+    \section{Research}
+    
+        \subsection{Forex Trading}
+        
+        The Forex (foreign exchange) trading market is huge. Every day, \$5.3 trillion US Dollars are traded on the forex market - 53 x the volume that is traded on the New York Stock exchange \cite{brokernotes_2018}.\\
+        
+        Successful traders are often those that have lots of experience with markets. Over time they gain some intuition or "feel" for how the market will act. That being said however, markets move randomly. Trading, especially forex trading, has been likened to gambling because of this - it's risky and very difficult to reliably predict \cite{hannah_2017}. Even when a correct prediction is made, margins in forex are very small so turning a profit is difficult, especially when taking into account the broker's fees to carry out the trade.\\
+
+        To an extent however, a trader can try to predict long term forex trends through following current events. For example, if a country is going through a period of political instability or uncertainty, a trader might choose to sell that currency. For example, the result of the 2016 "Brexit" vote caused the pound to fall to a 31 year low. \cite{bbc_news_2016} \includegraphics{pound_plummet.png}
+
+
+            \subsubsection{Mechanics of Trading}
+            When trading forex, we talk about trading currency pairs, for example GBP/USD
+
+
+            \subsubsection{Broker Fees}
+            
+            Broker fees can come in a number of different varieties. Disregarding fees a broker might charge for advice or other services, two common fee types are spread and commission \cite{tradimo_cost}.\\
+            
+            Spread is the difference between the buy and sell price of a currency pair quoted by a broker. This difference is given in pips - the fourth decimal place of a quoted price.\footnote{Imagine you are trading EUR/USD} Spreads can be fixed or variable depending on the broker. Variable spreads could depend on market volatility or trading volume for example - if a currency pair moves a large amount, a broker would prefer to set a larger spread. \\
+
+            Commission can come in fixed and variable forms as well. Fixed fee commissions tend to be very large, and targeted for people trading at high volumes. Variable fees are dependant on the volume traded, and so offer a good middle ground for all traders. Because of this, variable fees are growing in popularity. \cite{llc_2016} 
+
+
+            \subsubsection{Trading on Leverage}
+
+
+            \subsubsection{Gold}
+
+            Historically, the value of gold remains stable 
+
+
+
+    \subsection{Solution} To approach this problem, we will be using a technique in machine learning called reinforcement learning - letting an agent learn what actions are good/bad to take through trial and error in its environment. This has been used widely over the past few years to solve problems such as learning to play computer games as well as being used for applications such as market trading. For complex problems such as those stated above, reinforcement learning is more effective and easier to do than hard coding a strategy. 
+
+    \subsection{Requirements} The completed solution should be a trained agent that is able to simulate trade between two or three currency pairs *specify*, being able to consistently turn a profit of at least *specify percentage* over a *given time frame*. It should be able to simulate trades in real time, using live forex market data. The program will start with *specify amount* of gold in each currency, and the program's portfolio will be expressed in gold at each point. This has been chosen as gold can act as a stable, cross-currency baseline, allowing us to evaluate and compare performance effectively.
+
