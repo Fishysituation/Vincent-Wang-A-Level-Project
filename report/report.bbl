@@ -6,19 +6,54 @@
   \harvardyearleft 2018\harvardyearright .
 \newline\harvardurl{https://brokernotes.co/forex-trading-industry-statistics/}
 
+\harvarditem{{\em Candlestick Chart}}{n.d.}{candlestick_OHLC}
+{\em Candlestick Chart}  \harvardyearleft n.d.\harvardyearright .
+\newline\harvardurl{https://datavizcatalogue.com/methods/candlestick_chart.html}
+
 \harvarditem{Hannah}{2017}{hannah_2017}
 Hannah, F.  \harvardyearleft 2017\harvardyearright , `Beginner's guide to
   currency trading'.
 \newline\harvardurl{https://www.independent.co.uk/money/beginners-guide-to-currency-trading-a7568956.html}
+
+\harvarditem{Lioudis}{2018{\em a}}{lioudis_2018}
+Lioudis, N.~K.  \harvardyearleft 2018{\em a}\harvardyearright , `Forex
+  leverage: A double-edged sword'.
+\newline\harvardurl{https://www.investopedia.com/articles/forex/07/forex_leverage.asp}
+
+\harvarditem{Lioudis}{2018{\em b}}{investopedia_beginner}
+Lioudis, N.~K.  \harvardyearleft 2018{\em b}\harvardyearright , `Forex trading:
+  A beginner's guide'.
+\newline\harvardurl{https://www.investopedia.com/articles/forex/11/why-trade-forex.asp}
 
 \harvarditem{LLC}{2016}{llc_2016}
 LLC, S. L. C.~M.  \harvardyearleft 2016\harvardyearright , `Calcuating forex
   costs in trading'.
 \newline\harvardurl{https://www.youtube.com/watch?v=gt5sQN19VAk}
 
+\harvarditem{Momoh}{2018}{momoh_2018}
+Momoh, O.  \harvardyearleft 2018\harvardyearright , `Stop order'.
+\newline\harvardurl{https://www.investopedia.com/terms/s/stoporder.asp}
+
+\harvarditem{{\em Open-high-low-close Chart}}{n.d.}{barchart_OHLC}
+{\em Open-high-low-close Chart}  \harvardyearleft n.d.\harvardyearright .
+\newline\harvardurl{https://datavizcatalogue.com/methods/OHLC_chart.html}
+
 \harvarditem{{\em Pound plunges after Leave vote}}{2016}{bbc_news_2016}
 {\em Pound plunges after Leave vote}  \harvardyearleft 2016\harvardyearright .
 \newline\harvardurl{https://www.bbc.co.uk/news/business-36611512}
+
+\harvarditem{Russell}{n.d.}{russell}
+Russell, J.  \harvardyearleft n.d.\harvardyearright , `Learn about short
+  selling currency and how it works in forex market'.
+\newline\harvardurl{https://www.thebalance.com/what-it-means-to-go-short-in-investment-terms-1344960}
+
+\harvarditem{Staff}{2017}{staff_2017}
+Staff, I.  \harvardyearleft 2017\harvardyearright , `2% rule'.
+\newline\harvardurl{https://www.investopedia.com/terms/t/two-percent-rule.asp}
+
+\harvarditem{Staff}{2018}{investopedia_OHLC}
+Staff, I.  \harvardyearleft 2018\harvardyearright , `Ohlc chart'.
+\newline\harvardurl{https://www.investopedia.com/terms/o/ohlcchart.asp}
 
 \harvarditem{{\em The cost of trading forex}}{n.d.}{tradimo_cost}
 {\em The cost of trading forex}  \harvardyearleft n.d.\harvardyearright .
