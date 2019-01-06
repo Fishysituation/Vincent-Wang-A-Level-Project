@@ -4,21 +4,19 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 """
-testing saving and loading models/running many training sessions and picking the best
-
-also
- - general cleanups 
- - move training to gpu
+Test for loading in a trained network and assessing performance
+Load in best network from the produced 
 """
 
 batchSize = 20
 timesteps = 24
-noEpochs = 1000
+noEpochs = 2000
 
 typicalSpread = 0.00007
 
 toPredict = 1
 
+modelPath = "testModel.pth"
 
 class model(nn.Module):
     
@@ -38,6 +36,7 @@ class model(nn.Module):
         x = F.relu(self.out(x))
         x = F.softmax(x, dim=2)
         return x
+
 
 
 def readIn():
@@ -93,9 +92,19 @@ def getData(noPrev, toPredict):
     return autograd.Variable(torch.tensor(batch)*1000), autograd.Variable(torch.tensor(targets).float())
 
 
+def calculatePercentage(prediction, expected):
+    correct = 0
+    for i in range(0, len(prediction)):
+        if prediction[i] == expected[i]:
+            correct += 1
+    return correct/len(prediction) * 100
 
-smallestLoss = 1 
-bestModel = None
+
+
+net = model(timesteps*4, timesteps)
+net.load_state_dict(torch.load(modelPath))
+net.cuda()
+net.eval()
 
 #get data from previous timesteps + the target for the prediction
 batch, targets = getData(timesteps, toPredict)
@@ -104,40 +113,16 @@ batch, targets = getData(timesteps, toPredict)
 batch = batch.cuda()
 targets = targets.cuda()
 
-#run multiple models
-for i in range(0, 50):
 
-    print("Training model: " + str(i))
+out = net(batch)
 
-    #init network and optimizer
-    net = model(timesteps*4, timesteps)
-    optimizer = optim.Adam(net.parameters(), lr=0.002)
+_, prediction = out.max(2)
+_, expected = targets.max(2)
 
-    #move net to gpu
-    net = net.cuda()
-    #set to training mode
-    net.train()
+lossFunc = nn.MSELoss()
+loss = lossFunc(out, targets)
+loss.backward()
 
-    for j in range(0, noEpochs):
-        out = net(batch)
 
-        net.zero_grad()
-        optimizer.zero_grad()
-
-        lossFunc = nn.MSELoss()
-        loss = lossFunc(out, targets)
-        loss.backward()
-
-        optimizer.step()
-
-        #if on the final iteration of optimisation
-        if j == noEpochs - 1:
-
-            print("Final loss of: " + str(loss.item()) + "\n")
-            if loss < smallestLoss:
-                smallestLoss = loss
-                bestModel = net.state_dict()
-    
-
-print("Best model had MSE loss of: " + str(smallestLoss.item()))
-torch.save(bestModel, "testModel.pth")
+print("Percentage correct: " + str(calculatePercentage(prediction, expected)))
+print("Mean squared error: " + str(loss.item()))
