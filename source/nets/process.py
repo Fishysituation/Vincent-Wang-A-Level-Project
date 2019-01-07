@@ -2,16 +2,14 @@
 put data into correct form for network input/target outputs
 """
 
-
 import torch
 from torch import autograd
-
+import random as r
 
 typicalSpread = 0.00007
-dataPath = "data/overfit.txt"
 
 
-def readIn():
+def readIn(dataPath):
     toReturn = []
 
     with open(dataPath, 'r') as file:
@@ -24,16 +22,16 @@ def readIn():
     return toReturn
 
 
-def getData(batchSize, noPrev, toPredict, conv=True):
+def getAll(noPrev, toPredict, dataPath, conv=True):
     
-    #read data in from 
-    data = readIn()
+    #take ohlc data in from file
+    data = readIn(dataPath)
 
-    batch = []
+    inputs = []
     targets = [] 
 
-    #for each item in batch
-    for i in range(0, batchSize):
+    #for each item in datafile
+    for i in range(0, len(data) - noPrev - toPredict):
 
         #most recent close price
         finalClose = data[i+noPrev-1][3]
@@ -48,7 +46,7 @@ def getData(batchSize, noPrev, toPredict, conv=True):
                 h.append(data[j][1] - localOpen)
                 l.append(data[j][2] - localOpen)
                 c.append(data[j][3] - finalClose)
-            batch.append([o, h, l, c])
+            inputs.append([o, h, l, c])
 
         else:
             item = []
@@ -58,7 +56,7 @@ def getData(batchSize, noPrev, toPredict, conv=True):
                 item.append(data[j][1] - localOpen)
                 item.append(data[j][2] - localOpen)
                 item.append(data[j][3] - finalClose)
-            batch.append([o, h, l, c])
+            inputs.append([item])
 
 
         target = []
@@ -73,6 +71,36 @@ def getData(batchSize, noPrev, toPredict, conv=True):
 
         targets.append(target)
 
-    #return batch and targets as autograd variables 
-    return autograd.Variable(torch.tensor(batch)*1000), autograd.Variable(torch.tensor(targets).float())
+    #return inputs and targets as autograd variables 
+    return autograd.Variable(torch.tensor(inputs)*1000), autograd.Variable(torch.tensor(targets).float())
 
+
+
+def getBatch(inputs, targets):
+    #take a proportion of the training data
+    batchProp = 0.1
+    length = int(len(inputs)*batchProp)
+    startIndex = r.randint(0, len(inputs) - length)
+    return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
+
+
+def splitData(inputs, targets):
+    #split data into training/testing
+    splitProp = 0.8
+    splitIndex = int(len(inputs)*splitProp)
+
+    return (
+        inputs[:splitIndex], targets[:splitIndex],
+        inputs[splitIndex:], targets[splitIndex:]
+    )
+
+
+def get(noPrev, toPredict, dataPath):
+    #get data from previous timesteps + the target for the prediction
+    inputs, targets = getAll(noPrev, toPredict, dataPath)
+
+    #move to GPU
+    inputs = inputs.cuda()
+    targets = targets.cuda()
+
+    return splitData(inputs, targets)

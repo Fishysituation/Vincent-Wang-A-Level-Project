@@ -16,17 +16,22 @@ class model(nn.Module):
         self.c1 = nn.Conv1d(4, 2, 1)
         self.c2 = nn.Conv1d(2, 1, 1)
         self.h1 = nn.Linear(h1_no, 64)
-        self.h2 = nn.Linear(64, 16)
+        self.h2 = nn.Linear(64, 32)
+        self.h3 = nn.Linear(32, 16)
         self.out = nn.Linear(16, out_no)
         
         self.optimizer = optim.Adam(self.parameters(), lr=0.002)
         self.lossFunc = nn.MSELoss()
+
+        self.dropout = nn.Dropout(0.2)
+
 
     def forward(self, x):
         x = F.relu(self.c1(x))
         x = F.relu(self.c2(x))
         x = F.relu(self.h1(x))
         x = F.relu(self.h2(x))
+        x = F.relu(self.h3(x))
         x = F.relu(self.out(x))
         x = F.softmax(x, dim=2)
         return x
