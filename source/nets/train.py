@@ -37,7 +37,7 @@ def iterate(net, inputs, targets, noEpochs):
                 print("stopped training model\n")
                 break
 
-            elif j == 1000 and loss > 0.18:
+            elif j == 1000 and loss > 0.195:
                 print("stopped training model\n")
                 break
 

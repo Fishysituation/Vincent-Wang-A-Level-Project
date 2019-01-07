@@ -104,3 +104,10 @@ def get(noPrev, toPredict, dataPath):
     targets = targets.cuda()
 
     return splitData(inputs, targets)
+
+
+def getRandom(inputs, targets, length):
+    #return random sample 
+    startIndex = r.randint(0, len(inputs) - length)
+    return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
+    

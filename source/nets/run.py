@@ -46,7 +46,6 @@ for i in range(0, noModels):
     net = net.cuda()
 
 
-
     print("Training model: " + str(i))
 
     #train the network
@@ -69,13 +68,9 @@ for i in range(0, noModels):
         bestModelLoss = net.state_dict()
 
 
-print("Best model off percentage had success of: " + str(largestPercent) + " on unseen data")
-print("Best model off loss had success of: " + str(smallestLoss) + " on unseen data")
+print("Best network off percentage had success of: " + str(largestPercent) + " on unseen data")
+print("Best network off loss had success of: " + str(smallestLoss) + " on unseen data")
 
-"""
-if bestModelLoss == bestModelPercent:
-    print("Same model lol")
-"""
 
-torch.save(bestModelLoss, outPathPercent)
+torch.save(bestModelLoss, outPathLoss)
 torch.save(bestModelPercent, outPathPercent)

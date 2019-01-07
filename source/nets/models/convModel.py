@@ -1,6 +1,5 @@
 """
 feed forward model that convolves ohlc data from each time step
-
 """
 
 import torch
