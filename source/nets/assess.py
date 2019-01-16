@@ -16,15 +16,20 @@ def calculatePercentage(prediction, expected):
     return correct/len(prediction) * 100
 
 
-def testNetwork(net, inputs, targets):
+def testNetwork(net, inputs, targets, lstm=False):
 
     net.eval()
 
+    #if the lstm network
+    if lstm:
+        #clear the hidden/cell states
+        net.hidden = net.init_hidden()
+
     out = net(inputs)
 
-    _, prediction = out.max(2)
-    _, expected = targets.max(2)
-
+    _, prediction = out.max(1)
+    _, expected = targets.max(1)
+    
     lossFunc = nn.MSELoss()
     loss = lossFunc(out, targets)
 

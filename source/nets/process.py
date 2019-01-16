@@ -22,13 +22,10 @@ def readIn(dataPath):
     return toReturn
 
 
-def getAll(noPrev, toPredict, dataPath, conv=True):
-    
-    #take ohlc data in from file
-    data = readIn(dataPath)
 
-    inputs = []
-    targets = [] 
+def getTargets(noPrev, toPredict, data):
+
+    targets = []
 
     #for each item in datafile
     for i in range(0, len(data) - noPrev - toPredict):
@@ -36,44 +33,79 @@ def getAll(noPrev, toPredict, dataPath, conv=True):
         #most recent close price
         finalClose = data[i+noPrev-1][3]
 
-        #if network convolves ohlc data
-        if conv:
-            #"rotate" data so it can be convolved
-            o, h, l, c = [], [], [], []
-            for j in range(i, i+noPrev):
-                localOpen = data[j][0]
-                o.append(data[j][0] - finalClose)
-                h.append(data[j][1] - localOpen)
-                l.append(data[j][2] - localOpen)
-                c.append(data[j][3] - finalClose)
-            inputs.append([o, h, l, c])
-
-        else:
-            item = []
-            for j in range(i, i+noPrev):
-                localOpen = data[j][0]
-                item.append(data[j][0] - finalClose)
-                item.append(data[j][1] - localOpen)
-                item.append(data[j][2] - localOpen)
-                item.append(data[j][3] - finalClose)
-            inputs.append([item])
-
-
-        target = []
-
         value = data[i+noPrev+toPredict][3] - finalClose
         if value >= typicalSpread:
-            target.append([1, 0, 0])
+            targets.append([1, 0, 0])
         elif value <= -(typicalSpread):
-            target.append([0, 0, 1])
+            targets.append([0, 0, 1])
         else:
-            target.append([0, 1, 0])
+            targets.append([0, 1, 0])
 
-        targets.append(target)
+    return autograd.Variable(torch.tensor(targets).float())
 
-    #return inputs and targets as autograd variables 
-    return autograd.Variable(torch.tensor(inputs)*1000), autograd.Variable(torch.tensor(targets).float())
 
+def getLSTMProcessed(noPrev, toPredict, data):
+    #separate into the inputs for one feedForward run
+    inputs = []
+
+    
+    for i in range(0, len(data) - noPrev - toPredict):
+        total = 0
+        temp = []
+
+        for j in range(i, i+noPrev):
+            temp.append(data[j])
+            total += data[j][-1]
+
+        #"normalise"
+        mean = total/noPrev
+        normalised = []
+
+        for x in range(0, len(temp)):
+            ohlcNorm = []
+            for y in range(0, len(temp[x])):
+                ohlcNorm.append(temp[x][y]-mean)
+            normalised.append(ohlcNorm)
+
+        inputs.append(normalised)
+
+    return autograd.Variable((torch.tensor(inputs))*100)
+
+
+def getConvProcessed(noPrev, toPredict, data, takeRelative=False):
+    
+    inputs = []
+
+    #for each item in datafile
+    for i in range(0, len(data) - noPrev - toPredict):
+        
+        #most recent close price
+        finalClose = 0 
+        
+        if takeRelative: 
+            finalClose = data[i+noPrev-1][3]
+
+        #"rotate" data so it can be convolved
+        o, h, l, c = [], [], [], []
+        for j in range(i, i+noPrev):
+            
+            localOpen = 0
+            
+            if takeRelative: 
+                data[j][0]
+                
+            o.append(data[j][0] - finalClose)
+            h.append(data[j][1] - localOpen)
+            l.append(data[j][2] - localOpen)
+            c.append(data[j][3] - finalClose)
+        inputs.append([o, h, l, c])
+
+
+    #return inputs and as autograd variable, scale the relative values used
+    if takeRelative:
+        return autograd.Variable(torch.tensor(inputs)*1000)
+    else:
+        return autograd.Variable(torch.tensor(inputs))
 
 
 def getBatch(inputs, targets):
@@ -95,9 +127,19 @@ def splitData(inputs, targets):
     )
 
 
-def get(noPrev, toPredict, dataPath):
+def get(noPrev, toPredict, dataPath, conv=False, raw=False):
     #get data from previous timesteps + the target for the prediction
-    inputs, targets = getAll(noPrev, toPredict, dataPath)
+
+    data = readIn(dataPath)
+    inputs = None
+
+    if conv:
+        inputs = getConvProcessed(noPrev, toPredict, data)
+    else:
+        inputs = getLSTMProcessed(noPrev, toPredict, data)
+    
+    
+    targets = getTargets(noPrev, toPredict, data)    
 
     #move to GPU
     inputs = inputs.cuda()
@@ -110,4 +152,8 @@ def getRandom(inputs, targets, length):
     #return random sample 
     startIndex = r.randint(0, len(inputs) - length)
     return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
-    
+
+"""    
+trai, trat, testi, test = get(1, 1, "data/OHLC15sample.csv", conv=False, raw=True)
+print(trai)
+"""
