@@ -32,9 +32,8 @@ def iterate(net, inputs, targets, noEpochs, lstm=False):
         net.zero_grad()
         net.optimizer.zero_grad()
        
-
-
         out = net(batchIn)
+
         loss = net.lossFunc(out, batchTa)
 
         net.train()
@@ -44,12 +43,14 @@ def iterate(net, inputs, targets, noEpochs, lstm=False):
 
 
 
-        if j > 0 and j % 50 == 0:
+        if j % 25 == 0:
             print("iteration: " + str(j) +  " Loss: " + str(loss.item()))
-
-            print(out)
-            print(batchTa)
+            toView = 5
             
+            print("target: " + str(batchTa[:toView].view(1, toView)))
+            print("predi.: " + str(out[:toView].view(1, toView)))
+            
+            print()
             """
             if j == 500 and loss > cutoff1:
                 print("stopped training model\n")

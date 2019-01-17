@@ -22,8 +22,7 @@ def readIn(dataPath):
     return toReturn
 
 
-
-def getTargets(noPrev, toPredict, data):
+def getMovementTargets(noPrev, toPredict, data):
 
     targets = []
 
@@ -44,11 +43,23 @@ def getTargets(noPrev, toPredict, data):
     return autograd.Variable(torch.tensor(targets).float())
 
 
+def getPredictionTargets(noPrev, toPredict, data):
+
+    targets = []
+
+    #for each item in datafile
+    for i in range(0, len(data) - noPrev - toPredict):
+        #take the close price
+        targets.append([data[i+noPrev+toPredict][-1]])
+
+    return autograd.Variable(torch.tensor(targets).float())
+
+
 def getLSTMProcessed(noPrev, toPredict, data):
     #separate into the inputs for one feedForward run
     inputs = []
+    means = []
 
-    
     for i in range(0, len(data) - noPrev - toPredict):
         total = 0
         temp = []
@@ -59,6 +70,7 @@ def getLSTMProcessed(noPrev, toPredict, data):
 
         #"normalise"
         mean = total/noPrev
+        means.append(torch.tensor([mean]))
         normalised = []
 
         for x in range(0, len(temp)):
@@ -68,8 +80,7 @@ def getLSTMProcessed(noPrev, toPredict, data):
             normalised.append(ohlcNorm)
 
         inputs.append(normalised)
-
-    return autograd.Variable((torch.tensor(inputs))*100)
+    return torch.stack(means), autograd.Variable((torch.tensor(inputs))*100)
 
 
 def getConvProcessed(noPrev, toPredict, data, takeRelative=False):
@@ -110,42 +121,48 @@ def getConvProcessed(noPrev, toPredict, data, takeRelative=False):
 
 def getBatch(inputs, targets):
     #take a proportion of the training data
-    batchProp = 0.1
+    batchProp = 0.2
     length = int(len(inputs)*batchProp)
     startIndex = r.randint(0, len(inputs) - length)
     return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
 
 
-def splitData(inputs, targets):
+def splitData(tensor):
     #split data into training/testing
     splitProp = 0.8
-    splitIndex = int(len(inputs)*splitProp)
+    splitIndex = int(len(tensor)*splitProp)
 
-    return (
-        inputs[:splitIndex], targets[:splitIndex],
-        inputs[splitIndex:], targets[splitIndex:]
-    )
+    return tensor[:splitIndex], tensor[splitIndex:]
 
 
-def get(noPrev, toPredict, dataPath, conv=False, raw=False):
+def get(noPrev, toPredict, dataPath, conv=False, price=False):
     #get data from previous timesteps + the target for the prediction
 
     data = readIn(dataPath)
     inputs = None
+    targets = None
+    means = None
 
     if conv:
         inputs = getConvProcessed(noPrev, toPredict, data)
     else:
-        inputs = getLSTMProcessed(noPrev, toPredict, data)
+        means, inputs = getLSTMProcessed(noPrev, toPredict, data)
     
-    
-    targets = getTargets(noPrev, toPredict, data)    
+    if price:
+        targets = getPredictionTargets(noPrev, toPredict, data)    
+    else:
+        targets = getMovementTargets(noPrev, toPredict, data)  
 
     #move to GPU
     inputs = inputs.cuda()
     targets = targets.cuda()
+    means = means.cuda()
 
-    return splitData(inputs, targets)
+    meansSep = splitData(means)
+    insSep = splitData(inputs)
+    targetSep = splitData(targets)
+
+    return meansSep[0], meansSep[1], insSep[0], insSep[1], targetSep[0], targetSep[1]
 
 
 def getRandom(inputs, targets, length):
