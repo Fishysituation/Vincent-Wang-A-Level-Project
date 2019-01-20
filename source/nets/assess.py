@@ -7,6 +7,9 @@ from torch import autograd, nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 typicalSpread = 0.00007
 
 
@@ -28,14 +31,12 @@ def calculatePercentagePrice(prediction, expected):
 
 
 
-def testNetwork(net, inputs, targets, lstm=False, price=False):
+def testNetwork(net, inputs, targets, means=None, plot=True):
 
     net.eval()
 
-    #if the lstm network
-    if lstm:
-        #clear the hidden/cell states
-        net.hidden = net.init_hidden()
+    #clear the hidden/cell states
+    net.hidden = net.init_hidden()
 
     out = net(inputs)
 
@@ -46,15 +47,25 @@ def testNetwork(net, inputs, targets, lstm=False, price=False):
     meanSquaredError = loss.item()
 
 
-    if price:
-        print("Correctly predicted within the spread: " + str(calculatePercentagePrice(out, targets)))
-        print("Mean squared error: " + str(loss.item()) + "\n")
-    else:
-        _, prediction = out.max(1)
-        _, expected = targets.max(1)
+    print("Correctly predicted within the spread: " + str(calculatePercentagePrice(out, targets)))
+    print("Mean squared error: " + str(loss.item()) + "\n")
+
     
-        print("Percentage correct: " + str(calculatePercentage(prediction, expected)))
-        print("Mean squared error: " + str(loss.item()) + "\n")
+    if plot:
+        plotPredictions(out/100 + means, targets/100 + means)
+
 
     #return percentageError, meanSquaredError
 
+
+
+def plotPredictions(out, targets):
+    toPlot = 200
+    start = 450
+    
+    out = out[start:start+toPlot].view(toPlot).detach().cpu().numpy()
+    targets = targets[start:start+toPlot].view(toPlot).detach().cpu().numpy()
+    
+    plt.plot(targets)
+    plt.plot(out)
+    plt.show()

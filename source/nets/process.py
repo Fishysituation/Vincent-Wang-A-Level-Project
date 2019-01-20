@@ -9,6 +9,7 @@ import random as r
 typicalSpread = 0.00007
 
 
+
 def readIn(dataPath):
     toReturn = []
 
@@ -22,26 +23,6 @@ def readIn(dataPath):
     return toReturn
 
 
-def getMovementTargets(noPrev, toPredict, data):
-
-    targets = []
-
-    #for each item in datafile
-    for i in range(0, len(data) - noPrev - toPredict):
-
-        #most recent close price
-        finalClose = data[i+noPrev-1][3]
-
-        value = data[i+noPrev+toPredict][3] - finalClose
-        if value >= typicalSpread:
-            targets.append([1, 0, 0])
-        elif value <= -(typicalSpread):
-            targets.append([0, 0, 1])
-        else:
-            targets.append([0, 1, 0])
-
-    return autograd.Variable(torch.tensor(targets).float())
-
 
 def getPredictionTargets(noPrev, toPredict, data):
 
@@ -53,6 +34,7 @@ def getPredictionTargets(noPrev, toPredict, data):
         targets.append([data[i+noPrev+toPredict][-1]])
 
     return autograd.Variable(torch.tensor(targets).float())
+
 
 
 def getLSTMProcessed(noPrev, toPredict, data):
@@ -83,41 +65,6 @@ def getLSTMProcessed(noPrev, toPredict, data):
     return torch.stack(means), autograd.Variable((torch.tensor(inputs))*100)
 
 
-def getConvProcessed(noPrev, toPredict, data, takeRelative=False):
-    
-    inputs = []
-
-    #for each item in datafile
-    for i in range(0, len(data) - noPrev - toPredict):
-        
-        #most recent close price
-        finalClose = 0 
-        
-        if takeRelative: 
-            finalClose = data[i+noPrev-1][3]
-
-        #"rotate" data so it can be convolved
-        o, h, l, c = [], [], [], []
-        for j in range(i, i+noPrev):
-            
-            localOpen = 0
-            
-            if takeRelative: 
-                data[j][0]
-                
-            o.append(data[j][0] - finalClose)
-            h.append(data[j][1] - localOpen)
-            l.append(data[j][2] - localOpen)
-            c.append(data[j][3] - finalClose)
-        inputs.append([o, h, l, c])
-
-
-    #return inputs and as autograd variable, scale the relative values used
-    if takeRelative:
-        return autograd.Variable(torch.tensor(inputs)*1000)
-    else:
-        return autograd.Variable(torch.tensor(inputs))
-
 
 def getBatch(inputs, targets):
     #take a proportion of the training data
@@ -125,6 +72,7 @@ def getBatch(inputs, targets):
     length = int(len(inputs)*batchProp)
     startIndex = r.randint(0, len(inputs) - length)
     return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
+
 
 
 def splitData(tensor):
@@ -135,23 +83,14 @@ def splitData(tensor):
     return tensor[:splitIndex], tensor[splitIndex:]
 
 
-def get(noPrev, toPredict, dataPath, conv=False, price=False):
+
+def get(noPrev, toPredict, dataPath):
     #get data from previous timesteps + the target for the prediction
 
     data = readIn(dataPath)
-    inputs = None
-    targets = None
-    means = None
 
-    if conv:
-        inputs = getConvProcessed(noPrev, toPredict, data)
-    else:
-        means, inputs = getLSTMProcessed(noPrev, toPredict, data)
-    
-    if price:
-        targets = getPredictionTargets(noPrev, toPredict, data)    
-    else:
-        targets = getMovementTargets(noPrev, toPredict, data)  
+    means, inputs = getLSTMProcessed(noPrev, toPredict, data)
+    targets = getPredictionTargets(noPrev, toPredict, data)    
 
     #move to GPU
     inputs = inputs.cuda()
@@ -165,12 +104,9 @@ def get(noPrev, toPredict, dataPath, conv=False, price=False):
     return meansSep[0], meansSep[1], insSep[0], insSep[1], targetSep[0], targetSep[1]
 
 
+
 def getRandom(inputs, targets, length):
     #return random sample 
     startIndex = r.randint(0, len(inputs) - length)
     return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
 
-"""    
-trai, trat, testi, test = get(1, 1, "data/OHLC15sample.csv", conv=False, raw=True)
-print(trai)
-"""
