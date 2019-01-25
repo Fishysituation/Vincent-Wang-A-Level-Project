@@ -1,0 +1,15 @@
+{
+  "name": "vincent-wang-a-level-project",
+  "version": "1.0.0",
+  "description": "front end for a level project",
+  "main": "index.js",
+  "dependencies": {
+    "chart.js": "^2.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

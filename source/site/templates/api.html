@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    API
+{% endblock %}
+
+{% block content %}
+
+    <h2>Get an API key</h2>
+
+    <div class="errorMessage">
+        <ul>
+        {% for message in get_flashed_messages() %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+
+    <form action="{{url_for('api')}}" method="post"> 
+        Enter your email: <br>
+        <input type="text" name="email" placeholder="Enter email here">
+        <input type="submit" value="Submit">
+    </form>
+
+    <br>
+    <a target='blank' href="/api/data?apikey=testKey" >Example Query</a>
+    <br>
+
+{% endblock %}
+
