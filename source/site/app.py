@@ -8,11 +8,63 @@ databasePath = "database.db"
 from flask import render_template, request, flash, redirect, url_for, Response
 
 import random, string
+import datetime, threading, time
+import json, requests
+
+alphaVantageDataFile = 'static/data.json'
+alphaVantageKey = "2XFPRGYPL0RM2GQ8"
 
 
 app = Flask(__name__)
 app.secret_key = "secret key"
 
+
+#update data.json, return the time of the data sent
+def getPriceData(): 
+    api_url = "https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=EUR&to_symbol=USD&interval=15min&outputsize=compact&apikey=" + alphaVantageKey
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        print("Get successful.")
+        data = json.loads(response.content.decode('utf-8'))
+
+        with open(alphaVantageDataFile, 'w') as f:
+            json.dump(data, f, indent=4)
+
+        return getTime(data["Meta Data"]["4. Last Refreshed"])
+
+
+@app.before_first_request
+def activate_job():
+
+    #get latest prices first
+    getPriceData()
+
+    def updatePriceData():
+        dataTime = getPriceData()
+        check = False
+        
+        while True:
+            
+            current = datetime.datetime.utcnow()
+            
+            if current.minute % 15 == 0: 
+                check = True 
+            
+            if check:
+                print("Checking for new prices...")
+                newTime = getPriceData()
+                #if prices have updated, stop checking
+                if dataTime != newTime:
+                    print("Prices updated.")
+                    check = False
+                else:
+                    print("Prices Unchanged.")
+
+            time.sleep(20)
+
+    thread = threading.Thread(target=updatePriceData)
+    thread.start()
 
 
 def createKey():
@@ -28,9 +80,21 @@ def createKey():
     return toReturn
 
 
+def getTime(datetime):
+    time = str(datetime).split()[1]
+    return time[:5]
+
+
 @app.route("/")
 def home():
-    return render_template("home.html")
+    time = getTime(datetime.datetime.utcnow())
+
+    #TODO account for weekend closing so times don't get v confusing
+    with open('static/data.json') as f:
+        data = json.load(f)
+        dataTime = getTime(data["Meta Data"]["4. Last Refreshed"])
+    
+    return render_template("home.html", timeNow=time, dataTime=dataTime, data=data["Time Series FX (15min)"])
 
 
 @app.route("/api", methods=["GET", "POST"])
@@ -123,3 +187,9 @@ def returnData():
 @app.route("/test")
 def test():
     return render_template("test.html")
+
+
+
+if __name__ == "__main__":
+    app.debug = False
+    app.run()

@@ -1,9 +1,21 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Home
+EUR/USD Price Predictor
 {% endblock %}
 
 {% block content %}
-<p>Home page.</p>
+<h1>Forex EUR/USD Price Predictor</h1>
+
+<div class = times>
+    <h3>Current Time: {{timeNow}} (UTC)</h3>
+    <h3>Showing Data for: {{dataTime}} (UTC)<h3>
+</div>
+
+<ul>
+    {% for key, value in data.items() %}
+        <li>{{key}}:{{value}}</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
