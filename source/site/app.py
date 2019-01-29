@@ -29,7 +29,7 @@ def getPriceData():
         data = json.loads(response.content.decode('utf-8'))
 
         with open(alphaVantageDataFile, 'w') as f:
-            json.dump(data, f, indent=4)
+            json.dump(data, f) #indent=4)
 
         return getTime(data["Meta Data"]["4. Last Refreshed"])
 
@@ -61,7 +61,7 @@ def activate_job():
                 else:
                     print("Prices Unchanged.")
 
-            time.sleep(20)
+            time.sleep(45)
 
     thread = threading.Thread(target=updatePriceData)
     thread.start()
@@ -88,13 +88,47 @@ def getTime(datetime):
 @app.route("/")
 def home():
     time = getTime(datetime.datetime.utcnow())
+    noPrev = 20
+    toPredict = 4
 
     #TODO account for weekend closing so times don't get v confusing
     with open('static/data.json') as f:
         data = json.load(f)
         dataTime = getTime(data["Meta Data"]["4. Last Refreshed"])
     
-    return render_template("home.html", timeNow=time, dataTime=dataTime, data=data["Time Series FX (15min)"])
+        timeLabels = []
+        closePrices = []
+        for key, value in data["Time Series FX (15min)"].items():
+            timeLabels.append(key.split()[1][:-3])
+            closePrices.append(float(value['4. close']))
+
+        timeLabels = timeLabels[:noPrev]
+        timeLabels.reverse()
+        
+        for i in range(1, 2**(toPredict-1)+1):
+            timeLabels.append('+' + str(i))
+
+        closePrices = closePrices[:noPrev]
+        closePrices.reverse()
+
+        """
+        var timesteps = [0, 1, 2, 4, 8, 16]
+        predictions = [closePrices[-1], 1.1415, 1.143, 1.1434, 1.143]
+        predictionPrices = []
+        for i in range(0, toPredict)
+        """
+
+        print(timeLabels)
+        print(closePrices)
+        print([closePrices[-1], 1.1415, 1.143, 1.1434, 1.143])
+
+        return render_template("home.html",
+                            timeNow=time, 
+                            dataTime=dataTime, 
+                            timeLabels=timeLabels,
+                            closePrices=closePrices,
+                            predictions=[closePrices[-1], 1.1415, 1.143, 1.1434, 1.143],
+                            noPrev=noPrev)
 
 
 @app.route("/api", methods=["GET", "POST"])

@@ -12,10 +12,67 @@ EUR/USD Price Predictor
     <h3>Showing Data for: {{dataTime}} (UTC)<h3>
 </div>
 
-<ul>
-    {% for key, value in data.items() %}
-        <li>{{key}}:{{value}}</li>
-    {% endfor %}
-</ul>
+
+<div id='container'>
+    <canvas id="chart1" width=100% height=50%></canvas>
+</div>
+
+
+<script>
+
+    let ctx = document.getElementById('chart1').getContext('2d')
+    
+    var labels = {{timeLabels|safe}}
+    var noPrev = {{noPrev|safe}}
+    var predictions = {{predictions|safe}}
+
+    
+    //put data in x/y form for the predictions
+    var timesteps = [0, 1, 2, 4, 8, 16]
+    var predictionPoints = []
+
+    for(var i = 0 ; i < predictions.length; i ++) {
+        var xVal = timesteps[i] + noPrev - 1
+        predictionPoints.push({
+                x: labels[xVal], 
+                y: predictions[i]
+        })
+    }
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{timeLabels|safe}},
+            datasets: [
+                {
+                    label: 'Close Price',
+                    data: {{closePrices|safe}},
+                    borderColor: "#3e95cd",
+                    fill: origin,
+                    tension: 0
+                },
+                {
+                    label: 'Predictions',
+                    data: predictionPoints,
+                    borderColor: "#953ecd",
+                    fill: origin
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            bezier: false,
+            title: {
+                display: true,
+                text: 'Historic data and predictions'
+            }
+        }
+    });
+
+</script>
+
+
+<input type="range" min="10" max="100" step="5">
+
 
 {% endblock %}
