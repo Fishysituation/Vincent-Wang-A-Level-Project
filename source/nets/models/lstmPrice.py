@@ -10,9 +10,10 @@ import torch.optim as optim
 
 class model(nn.Module):
 
-    def __init__(self, itemSize, input_no=4, hidden_no=10, lstm_layer_no=1, out_no=1):
+    def __init__(self, itemSize, input_no=4, hidden_no=10, lstm_layer_no=1, out_no=1, learning_rate=0.4, useCuda=True):
         super(model, self).__init__()
 
+        self.useCuda = useCuda
         self.itemSize = itemSize
 
         self.hidden_no = hidden_no
@@ -29,14 +30,18 @@ class model(nn.Module):
         #lstm hidden states
         self.hidden = self.init_hidden()
 
-        self.optimizer = optim.Adam(self.parameters(), lr=0.1)
+        self.optimizer = optim.Adam(self.parameters(), lr=learning_rate)
         self.lossFunc = nn.MSELoss()
 
     
     def init_hidden(self):
         #init a blank hidden/cell state
-        return (torch.zeros(self.layer_no, self.itemSize, self.hidden_no).cuda(),
-                torch.zeros(self.layer_no, self.itemSize, self.hidden_no).cuda())
+        if self.cuda:
+            return (torch.zeros(self.layer_no, self.itemSize, self.hidden_no).cuda(),
+                    torch.zeros(self.layer_no, self.itemSize, self.hidden_no).cuda())
+        else:
+            return (torch.zeros(self.layer_no, self.itemSize, self.hidden_no),
+                    torch.zeros(self.layer_no, self.itemSize, self.hidden_no))
     
 
     #pass forword one batch

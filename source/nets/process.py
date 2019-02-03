@@ -6,8 +6,6 @@ import torch
 from torch import autograd
 import random as r
 
-typicalSpread = 0.00007
-
 
 
 def readIn(dataPath):
@@ -24,89 +22,141 @@ def readIn(dataPath):
 
 
 
-def getPredictionTargets(noPrev, toPredict, data):
+def getTargets(noPrev, toPredict, data):
 
     targets = []
 
-    #for each item in datafile
-    for i in range(0, len(data) - noPrev - toPredict):
+    #for each window in the data
+    for i in range(0, len(data) - noPrev - toPredict + 1):
         #take the close price
-        targets.append([data[i+noPrev+toPredict][-1]])
+        targets.append([data[i+noPrev+toPredict-1][-1]])
 
     return autograd.Variable(torch.tensor(targets).float())
 
 
 
-def getLSTMProcessed(noPrev, toPredict, data):
-    #separate into the inputs for one feedForward run
-    inputs = []
+def getMeans(noPrev, toPredict, data):
+
     means = []
 
-    for i in range(0, len(data) - noPrev - toPredict):
-        total = 0
-        temp = []
+    localTotal = 0
+    
+    #get the total of the first window
+    for i in range(0, noPrev - 1):
+        localTotal += data[i][-1]
 
+    #for each window in the data
+    for i in range(0, len(data) - noPrev - toPredict + 1):
+        #move the current window across 1
+        if i > 0:
+            localTotal -= data[i-1][-1]
+        localTotal += data[i+noPrev-1][-1]
+
+        means.append([localTotal/noPrev])
+
+    return autograd.Variable(torch.tensor(means).float())
+
+
+
+def getInputs(noPrev, toPredict, data):
+    return autograd.Variable(torch.tensor(data[:len(data)-toPredict]))
+
+
+
+def prepareInputs(means, inputs, noPrev):
+    
+    batchIn = []
+
+    #for each window
+    for i in range(0, len(inputs) - noPrev + 1):
+        window = []
         for j in range(i, i+noPrev):
-            temp.append(data[j])
-            total += data[j][-1]
+            window.append(inputs[j] - means[i])
 
-        #"normalise"
-        mean = total/noPrev
-        means.append(torch.tensor([mean]))
-        normalised = []
-
-        for x in range(0, len(temp)):
-            ohlcNorm = []
-            for y in range(0, len(temp[x])):
-                ohlcNorm.append(temp[x][y]-mean)
-            normalised.append(ohlcNorm)
-
-        inputs.append(normalised)
-    return torch.stack(means), autograd.Variable((torch.tensor(inputs))*100)
+        batchIn.append(torch.stack(window))
+    
+    return torch.stack(batchIn) * 100
 
 
 
-def getBatch(inputs, targets):
+def getBatch(means, inputs, targets, noPrev):
     #take a proportion of the training data
-    batchProp = 0.2
-    length = int(len(inputs)*batchProp)
-    startIndex = r.randint(0, len(inputs) - length)
-    return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
+    batchProp = 0.05
+    length = int(len(means)*batchProp)
+    startIndex = r.randint(0, len(means) - length)
+
+    splitStart = split(startIndex, means, inputs, targets, noPrev)
+    
+    #pass the latter halves of the split into another split
+    splitEnd = split(length, splitStart[1], splitStart[3], splitStart[5], noPrev)
+
+    batchMeans = splitEnd[0]
+    batchIns =  prepareInputs(batchMeans, splitEnd[2], noPrev)
+    batchTargets = (splitEnd[4]-batchMeans)*100
+
+    #batchIns, batchTargets are "normalised"
+    return batchIns, batchTargets
 
 
 
-def splitData(tensor):
+def splitData(means, inputs, targets, noPrev):
     #split data into training/testing
     splitProp = 0.8
-    splitIndex = int(len(tensor)*splitProp)
+    splitIndex = int(len(means)*splitProp)
 
-    return tensor[:splitIndex], tensor[splitIndex:]
+    return split(splitIndex, means, inputs, targets, noPrev)
 
 
 
 def get(noPrev, toPredict, dataPath):
-    #get data from previous timesteps + the target for the prediction
+    #get all data
 
     data = readIn(dataPath)
 
-    means, inputs = getLSTMProcessed(noPrev, toPredict, data)
-    targets = getPredictionTargets(noPrev, toPredict, data)    
+    inputs = getInputs(noPrev, toPredict, data)
+    targets = getTargets(noPrev, toPredict, data)    
+    means = getMeans(noPrev, toPredict, data) 
 
     #move to GPU
     inputs = inputs.cuda()
     targets = targets.cuda()
     means = means.cuda()
-
-    meansSep = splitData(means)
-    insSep = splitData(inputs)
-    targetSep = splitData(targets)
-
-    return meansSep[0], meansSep[1], insSep[0], insSep[1], targetSep[0], targetSep[1]
+    
+    return splitData(means, inputs, targets, noPrev)
 
 
 
-def getRandom(inputs, targets, length):
-    #return random sample 
-    startIndex = r.randint(0, len(inputs) - length)
-    return inputs[startIndex:startIndex+length], targets[startIndex:startIndex+length]
+def split(windowNo, means, inputs, targets, noPrev):
+    return means[:windowNo], means[windowNo:], inputs[:windowNo+noPrev-1], inputs[windowNo:], targets[:windowNo], targets[windowNo:]
 
+
+"""
+noPrev = 10
+toPredict = 1
+dataPath = "data/overfit.csv"
+
+means, _, inputs, _, targets, _ = get(noPrev, toPredict, dataPath)
+
+print(inputs)
+print(means.view(1, len(means)))
+print(targets.view(1, len(targets)))
+
+m1, m2, i1, i2, t1, t2 = split(4, means, inputs, targets, noPrev)
+
+print(m1)
+print(m2)
+print(i1)
+print(i2)
+print(t1)
+print(t2)
+
+returnI = prepareInputs(means, inputs, noPrev)
+print(inputs)
+print(returnI)
+
+batchMe, batchIn, batchTa = getBatch(means, inputs, targets, noPrev)
+
+print(batchMe)
+print(batchIn)
+print(batchTa)
+"""

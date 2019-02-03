@@ -11,15 +11,15 @@ import torch.optim as optim
 import process
 
 
-def iterate(net, inputs, targets, noEpochs, lstm=False):
+def iterate(net, means, inputs, targets, noPrev, noEpochs):
 
     net.train()
 
     for j in range(0, noEpochs):
         
         #get batch
-        batchIn, batchTa = process.getBatch(inputs, targets)
-        
+        batchIn, batchTa = process.getBatch(means, inputs, targets, noPrev)
+
         #clear the hidden/cell states
         net.hidden = net.init_hidden()
 
@@ -36,10 +36,10 @@ def iterate(net, inputs, targets, noEpochs, lstm=False):
         net.optimizer.step()
 
 
-        if j % 10 == 0:
+        if j % 1 == 0:
 
             print("iteration: " + str(j) +  " Loss: " + str(loss.item()))
-            toView = 10
+            toView = 5
             
             print("target: " + str(batchTa[:toView].view(1, toView)))
             print("predi.: " + str(out[:toView].view(1, toView)))

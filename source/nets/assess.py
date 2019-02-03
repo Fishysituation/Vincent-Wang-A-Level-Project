@@ -10,28 +10,28 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 import numpy as np
 
+import process
+
 typicalSpread = 0.00007
 
 
-
-def calculatePercentage(prediction, expected):
+def calculatePercentage(prediction, raw):
     correct = 0
-    for i in range(0, len(prediction)):
-        if prediction[i] == expected[i]:
-            correct += 1
-    return correct/len(prediction) * 100
+    startRaw = len(raw) - len(prediction)
 
-
-def calculatePercentagePrice(prediction, expected):
-    correct = 0
-    for i in range(0, len(prediction)):
-        if prediction[i] - expected[i] < typicalSpread*100:
+    for i in range(0, len(prediction)-1):
+        #if between the high and low
+        if (prediction[i] < raw[startRaw + i + 1][1] and 
+            prediction[i] > raw[startRaw + i + 1][2]):
             correct += 1
+    
     return correct/len(prediction) * 100
 
 
 
-def testNetwork(net, inputs, targets, means=None, plot=True):
+def testNetwork(net, rawIns, targets, means, windowSize, plot=True):
+
+    inputs = process.prepareInputs(means, rawIns, windowSize)
 
     net.eval()
 
@@ -39,20 +39,23 @@ def testNetwork(net, inputs, targets, means=None, plot=True):
     net.hidden = net.init_hidden()
 
     out = net(inputs)
+    outPrices = out/100 + means
+
 
     lossFunc = nn.MSELoss()
-    loss = lossFunc(out, targets)
+    loss = lossFunc(out, (targets-means)*100)
 
     #percentageError = calculatePercentage(prediction, expected)
     meanSquaredError = loss.item()
 
+    
 
-    print("Correctly predicted within the spread: " + str(calculatePercentagePrice(out, targets)))
-    print("Mean squared error: " + str(loss.item()) + "\n")
+    print("Correctly predicted within high/low: " + str(calculatePercentage(outPrices, rawIns)))
+    print("Mean squared error: " + str(meanSquaredError) + "\n")
 
     
     if plot:
-        plotPredictions(out/100 + means, targets/100 + means)
+        plotPredictions(outPrices, targets)
 
 
     #return percentageError, meanSquaredError
@@ -60,8 +63,8 @@ def testNetwork(net, inputs, targets, means=None, plot=True):
 
 
 def plotPredictions(out, targets):
-    toPlot = 200
-    start = 450
+    toPlot = 50
+    start = 100
     
     out = out[start:start+toPlot].view(toPlot).detach().cpu().numpy()
     targets = targets[start:start+toPlot].view(toPlot).detach().cpu().numpy()
