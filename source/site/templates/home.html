@@ -18,21 +18,28 @@ EUR/USD Price Predictor
 </div>
 
 
+<input id="historic" type="range" min="10" max="100" value=20 step="5">
+<input id="predictions" type="range" min="1" max="5" value=3 step="1">
+
+
+
 <script>
 
-    let ctx = document.getElementById('chart1').getContext('2d')
-    
+    var ctx = document.getElementById('chart1').getContext('2d')
+    var historicSlider = document.getElementById('historic')
+    var predictSlider = document.getElementById('prediction')
+
     var labels = {{timeLabels|safe}}
-    var noPrev = {{noPrev|safe}}
     var predictions = {{predictions|safe}}
 
-    
+    var noPrev = 50
+    var toPredict = 3
     //put data in x/y form for the predictions
     var timesteps = [0, 1, 2, 4, 8, 16]
     var predictionPoints = []
 
-    for(var i = 0 ; i < predictions.length; i ++) {
-        var xVal = timesteps[i] + noPrev - 1
+    for(var i = 0 ; i < toPredict + 1 ; i ++) {
+        var xVal = 100 + timesteps[i] - 1
         predictionPoints.push({
                 x: labels[xVal], 
                 y: predictions[i]
@@ -42,20 +49,34 @@ EUR/USD Price Predictor
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{timeLabels|safe}},
+            labels: {{timeLabels|safe}}.slice(100-noPrev, 100 + timesteps[toPredict]),
             datasets: [
                 {
                     label: 'Close Price',
-                    data: {{closePrices|safe}},
-                    borderColor: "#3e95cd",
-                    fill: origin,
+                    data: {{closePrices|safe}}.slice(100-noPrev, 100),
+                    borderColor: '#3399ff',
+                    fill: false,
+                    tension: 0
+                },
+                {
+                    label: 'High Price',
+                    data: {{highPrices|safe}}.slice(100-noPrev, 100),
+                    borderColor: "#ff9900",
+                    fill: 2,
+                    tension: 0
+                },
+                {
+                    label: 'Low Price',
+                    data: {{lowPrices|safe}}.slice(100-noPrev, 100),
+                    borderColor: "#33ff33",
+                    fill: false,
                     tension: 0
                 },
                 {
                     label: 'Predictions',
                     data: predictionPoints,
                     borderColor: "#953ecd",
-                    fill: origin
+                    fill: false
                 }
             ]
         },
@@ -69,10 +90,9 @@ EUR/USD Price Predictor
         }
     });
 
+
+
+
 </script>
-
-
-<input type="range" min="10" max="100" step="5">
-
 
 {% endblock %}
