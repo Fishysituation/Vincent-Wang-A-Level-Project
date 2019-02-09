@@ -1,5 +1,5 @@
 from flask import Flask
-from datetime import datetime
+import datetime
 import re
 
 import sqlite3 as sql
@@ -18,6 +18,9 @@ jsonPath = 'static/json/'
 sampleFile = 'sample.json'
 predictionsFile = 'predictions.json'
 errorFile = 'invalidGet.json'
+
+purgeDays = 1
+
 
 alphaVantageDataFile = 'data.json'
 alphaVantageKey = "2XFPRGYPL0RM2GQ8"
@@ -55,6 +58,39 @@ def getPriceData():
             return None
 
 
+
+def savePredictions(time, predictions):
+    #write predictions to database
+    print("Saving Predictions")
+    with sql.connect(databasePath) as con:
+        cur = con.cursor()
+        cur.execute("INSERT INTO predictions (dateTime, pred15, pred30, pred60, pred120, pred240, pred480) VALUES ('{}','{}','{}', {}, {}, {}, {})".format(
+            time, 
+            predictions[0], 
+            predictions[1], 
+            predictions[2], 
+            predictions[3], 
+            predictions[4], 
+            predictions[5])) 
+        con.commit()
+
+
+def getPredictions(time):
+    #check if predictions have already been made for this time
+    with open(jsonPath + predictionsFile, 'r') as f:
+        data = json.load(f)
+        predictionsTime = data["Meta Data"]["Time"]
+    
+    #if not, get new predictions and add a db entry
+    if predictionsTime != time:
+        print('Getting Predictions...')
+        predictions = jsonPredictions.predict(time)
+        savePredictions(time, predictions)
+        print('Done')
+    else:
+        print("Predictions already made.")
+
+
 @app.before_first_request
 def activate_job():
 
@@ -62,31 +98,34 @@ def activate_job():
     print('Getting Prices...')
     firstTime = getPriceData()
     #predict based off these 
-    print('Getting Predictions...')
-    jsonPredictions.predict(firstTime)
-    print('Done.')
+    getPredictions(firstTime)
 
-    #run update in the background
+    #run updates in the background
     def update():
         dataTime = getPriceData()
         check = False
         
         while True:
-            
+            #get current time
             current = datetime.datetime.utcnow()
             
+            #if new alphaVantage data expected
             if current.minute % 15 == 0: 
+                #check for new data
                 check = True 
-            
+            #if midnight
+            if current.hour == 0 and current.minute == 0:
+                #remove inactive users
+                purge()
+
             if check:
                 print("Checking for new prices...")
                 newTime = getPriceData()
+
                 #if prices have updated, stop checking
                 if dataTime != newTime:
                     print("Prices updated.")
-                    print("Getting Predictions")
-                    jsonPredictions.predict(newTime)
-                    print("Predictions done")
+                    getPredictions(newTime)
                     check = False
                 else:
                     print("Prices Not updated...")
@@ -97,6 +136,12 @@ def activate_job():
     thread.start()
 
 
+def purge():
+    #TODO yeet inactive users 
+    #sqlite3 has own datetime functions on strings in correct format x 
+    return
+
+
 def createKey():
     toReturn = ''
     #keep generating keys until a unique one is made
@@ -104,7 +149,7 @@ def createKey():
         cur = con.cursor()
         while True:
             toReturn = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-            cur.execute("SELECT * FROM user WHERE apiKey='%s'" %toReturn)
+            cur.execute("SELECT * FROM user WHERE apiKey = '{}'".format(toReturn))
             if len(cur.fetchall()) == 0:
                 break
     return toReturn
@@ -137,7 +182,7 @@ def home():
 
         timeLabels.reverse()
         
-        for i in range(1, 17):
+        for i in range(1, 33):
             timeLabels.append('+' + str(i))
 
         closePrices.reverse()
@@ -153,7 +198,7 @@ def home():
             predictions.append(value)
 
     #load in predictions from the api json file 
-    print(predictions)
+    #print(predictions)
 
     return render_template("home.html",
                         timeNow=time, 
@@ -192,7 +237,7 @@ def api():
             #see if email is already in use
             with sql.connect(databasePath) as con:
                 cur = con.cursor()
-                cur.execute("SELECT apiKey FROM user WHERE email = '%s'" % email)
+                cur.execute("SELECT apiKey FROM user WHERE email = '{}'".format(email))
                 query = cur.fetchall()
 
             #if email was found
@@ -202,20 +247,20 @@ def api():
                 return render_template("api.html")
 
             else:
+                #generate random alphanumeric string
                 apiKey = createKey()
-
+                #get date in string yyyy-mm-dd format
+                date = datetime.datetime.strftime(datetime.date.today(), "%Y-%m-%d")
                 try:
                     with sql.connect(databasePath) as con:
                         cur = con.cursor()
-                        cur.execute("INSERT INTO user (email, apiKey) VALUES (?,?)",(email, apiKey))
+                        cur.execute("INSERT INTO user (email, apiKey, dateCreated) VALUES ('{}','{}','{}')".format(email, apiKey, date))
                         
                         con.commit()
-                        #msg = "Record successfully added"
                         return redirect(url_for('showKey', key=apiKey))
 
                 except:
                     con.rollback()
-                    #msg = "error in insert operation"
 
                 flash("There was an error, please try again...")
                 return render_template("api.html")
@@ -238,20 +283,55 @@ def returnData():
             return send_from_directory(jsonPath, sampleFile)
 
         query = []
-        with sql.connect(databasePath) as con:
-            cur = con.cursor()
-            cur.execute("SELECT * FROM user WHERE apiKey = '%s'" % apiKey)
-            query = cur.fetchall()
-        
-        #if a valid get
-        if len(query) == 1:
-            #send the sample file as a placeholder for now
-            return send_from_directory(jsonPath, predictionsFile)
 
-        else: 
-            return send_from_directory(jsonPath, errorFile)
+        try:
+            with sql.connect(databasePath) as con:
 
-    #if api key not provided/invalid, return "unauthorized" response code
+                cur = con.cursor()
+                cur.execute("SELECT timeOfLastRequest FROM user WHERE apiKey = '{}'".format(apiKey))
+                query = cur.fetchall()
+
+                #if a valid get
+                if len(query) == 1:
+                    
+                    print("valid apikey")
+
+                    serveRequest = False
+                    
+                    #get datetime in string yyyy-mm-dd hh:mm:ss format
+                    timeNow = datetime.datetime.utcnow()
+
+                    requestString = query[0][0]
+
+                    #if first request
+                    if requestString == None:
+                        print("first request")
+                        serveRequest = True
+
+                    else:
+                        lastRequestTime = datetime.datetime.strptime(requestString, "%Y-%m-%d %H:%M:%S")
+                        timeDelta = timeNow - lastRequestTime
+                        
+                        #if requests not too frequent
+                        if timeDelta.total_seconds() > 20:
+                            print("request valid")
+                            serveRequest = True
+
+
+                    #update the last attempted request
+                    time = datetime.datetime.strftime(timeNow, "%Y-%m-%d %H:%M:%S")
+                    cur.execute("UPDATE user SET timeOfLastRequest = '{}' WHERE apiKey = '{}'".format(time, apiKey))
+                    con.commit()
+
+                    if serveRequest:
+                        return send_from_directory(jsonPath, predictionsFile)
+
+
+        except:
+            con.rollback()
+
+
+    #if api key not/provided or is invalid, or error requests too frequent, send an invalid response back
     return send_from_directory(jsonPath, errorFile)
 
 

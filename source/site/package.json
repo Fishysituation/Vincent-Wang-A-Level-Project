@@ -4,7 +4,9 @@
   "description": "front end for a level project",
   "main": "index.js",
   "dependencies": {
-    "chart.js": "^2.7.3"
+    "chart.js": "^2.7.3",
+    "es6-promise": "^4.2.5",
+    "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {},
   "scripts": {

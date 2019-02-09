@@ -3,11 +3,12 @@ import torch
 import static.nets.lstmPrice
 import json 
 
-netPaths = ["static/nets/15-20-10-1.pth",
-            "static/nets/30-30-15-2.pth",
-            "static/nets/30-30-15-2.pth",
-            "static/nets/30-30-15-2.pth",
-            "static/nets/30-30-15-2.pth"]
+netPaths = ["static/nets/15-10-20-1.pth",
+            "static/nets/30-20-20-1.pth",
+            "static/nets/60-20-20-1.pth",
+            "static/nets/120-40-20-1.pth",
+            "static/nets/240-50-30-1.pth",
+            "static/nets/480-80-30-1.pth"]
 
 dataPath = "static/json/data.json"
 outPath = "static/json/predictions.json"
@@ -52,7 +53,7 @@ def loadNet(path):
 
 def predict(time):
     #TODO do actually do this properly 
-    recentAccuracy = [100, 100, 100, 100, 100]
+    recentAccuracy = [100, 100, 100, 100, 100, 100]
 
     allData = getData(dataPath)
 
@@ -65,6 +66,8 @@ def predict(time):
 
     jsonData['Predictions'] = {}
 
+    toReturn = []
+
     #get the prediction for each timestep
     for i in range(0, len(netPaths)):
         net, noSteps = loadNet(netPaths[i])
@@ -74,10 +77,14 @@ def predict(time):
         out = net(data).item()
         prediction = (net(data).item()/100)+mean
 
+        toReturn.append(prediction)
+
+        """
         print(mean)
         print(out)
         print(prediction)
         print()
+        """
 
         key = '+{}mins'.format(15*(2**i))
         jsonData['Meta Data']['Recent Accuracy'][key] = recentAccuracy[i]
@@ -86,3 +93,4 @@ def predict(time):
     with open(outPath, 'w') as outfile:
         json.dump(jsonData, outfile, indent=4)
 
+    return toReturn

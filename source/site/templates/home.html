@@ -32,10 +32,10 @@ EUR/USD Price Predictor
     var labels = {{timeLabels|safe}}
     var predictions = {{predictions|safe}}
 
-    var noPrev = 50
-    var toPredict = 3
+    var noPrev = 40
+    var toPredict = 6
     //put data in x/y form for the predictions
-    var timesteps = [0, 1, 2, 4, 8, 16]
+    var timesteps = [0, 1, 2, 4, 8, 16, 32]
     var predictionPoints = []
 
     for(var i = 0 ; i < toPredict + 1 ; i ++) {
