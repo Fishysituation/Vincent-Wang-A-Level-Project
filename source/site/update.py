@@ -4,9 +4,8 @@ from flask import Blueprint
 
 import jsonPredictions
 
-
-import sqlite3 as sql
-databasePath = "database.db"
+from app import db
+from models import prediction
 
 jsonPath = 'static/json/'
 predictionsFile = 'predictions.json'
@@ -29,38 +28,43 @@ def getPriceData():
     if response.status_code == 200:
         data = json.loads(response.content.decode('utf-8'))
 
-        valid = True 
         for key in data.keys():
             #if error message returned
             if key == 'Error Message' or key == "Note:":
                 print('API Call invalid...')
                 print('Serving the last valid data file')
-                valid = False
 
-        if valid:
-            print("Get successful.")
-            with open(jsonPath + alphaVantageDataFile, 'w') as f:
-                json.dump(data, f, indent=4)
-            return data["Meta Data"]["4. Last Refreshed"]
+                with open(jsonPath + alphaVantageDataFile, 'r') as f:
+                    data = json.load(f)
+                    return data["Meta Data"]["4. Last Refreshed"]
 
-        else: 
-            return None
+
+        print("Get successful.")
+        with open(jsonPath + alphaVantageDataFile, 'w') as f:
+            json.dump(data, f, indent=4)
+        return data["Meta Data"]["4. Last Refreshed"]
+
 
 
 def savePredictions(time, predictions):
     #write predictions to database
     print("Saving Predictions")
-    with sql.connect(databasePath) as con:
-        cur = con.cursor()
-        cur.execute("INSERT INTO predictions (dateTime, pred15, pred30, pred60, pred120, pred240, pred480) VALUES ('{}','{}','{}', {}, {}, {}, {})".format(
-            time, 
-            predictions[0], 
-            predictions[1], 
-            predictions[2], 
-            predictions[3], 
-            predictions[4], 
-            predictions[5])) 
-        con.commit()
+
+    #create instance of prediction class
+    pred = prediction(
+        dateTime = datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S"),
+        pred15 = predictions[0],
+        pred30 = predictions[1],
+        pred60 = predictions[2],
+        pred120 = predictions[3],
+        pred240 = predictions[4],
+        pred480 = predictions[5],
+    )
+    
+    #write to database
+    db.session.add(pred)
+    db.session.commit()
+
 
 
 def getPredictions(time):
