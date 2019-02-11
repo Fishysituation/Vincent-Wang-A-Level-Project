@@ -4,9 +4,8 @@ from flask import render_template, request, flash, redirect, url_for, Response, 
 
 import datetime, time
 import json, requests
-
 import re
-
+import hashlib
 
 from app import db
 from models import user
@@ -21,6 +20,7 @@ errorFile = 'error.json'
 
 emailRegex = "^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)"
 
+salt = 'OkRLWyqj'
 
 api = Blueprint('api', __name__, template_folder='templates')
 
@@ -31,8 +31,8 @@ def createKey():
 
     while True:
         toReturn = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-        query = user.query.filter_by(apiKey=toReturn).all()
-        if len(query) == 0:
+        User = user.query.filter_by(apiKey=toReturn).first()
+        if User is None:
             break
 
     return toReturn
@@ -61,12 +61,15 @@ def apiHome():
             return render_template("api.html")
 
         else:
-            query = user.query.filter_by(emailHash=email).all()
-            print(query)
+            #get the hex hash of the email
+            emailHash = hashlib.md5((email+salt).encode()).hexdigest()
+            print(emailHash)
+            User = user.query.filter_by(emailHash=emailHash).first()
+
             #if email was found
-            if len(query) == 1:
+            if User is not None:
                 flash("This email is already in use")
-                flash("Your API key is: %s" % query[0].apiKey)
+                flash("Your API key is: %s" % User.apiKey)
                 return render_template("api.html")
 
             else:
@@ -76,7 +79,7 @@ def apiHome():
                 date = datetime.date.today()
 
                 newUser = user(
-                    emailHash = email,
+                    emailHash = emailHash,
                     apiKey = apiKey,
                     dateJoined = date
                 )
