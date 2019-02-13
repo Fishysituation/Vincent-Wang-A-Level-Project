@@ -7,10 +7,25 @@ class user(db.Model):
     emailHash = db.Column(db.String(32), index=True, unique=True)
     apiKey = db.Column(db.String(16), index=True, unique=True)
     dateJoined = db.Column(db.DateTime)
-    timeOfLastRequest = db.Column(db.DateTime)
+    
+    requests = db.relationship("apiRequest", back_populates="user", lazy='select')
 
     def __repr__(self):
         return '<User {}>'.format(self.id)
+
+
+class apiRequest(db.Model):
+    __tablename__ = "request"
+
+    id = db.Column(db.Integer, primary_key=True)
+    dateTime = db.Column(db.DateTime)
+    served = db.Column(db.Boolean)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship("user", back_populates="requests", lazy='select')
+    
+    def __repr__(self):
+        return '<Request {} {}>'.format(self.user_id, self.dateTime)
 
 
 class prediction(db.Model):

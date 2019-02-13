@@ -8,7 +8,7 @@ import re
 import hashlib
 
 from app import db
-from models import user
+from models import user, apiRequest
 
 
 jsonPath = 'static/json/'
@@ -63,7 +63,6 @@ def apiHome():
         else:
             #get the hex hash of the email
             emailHash = hashlib.md5((email+salt).encode()).hexdigest()
-            print(emailHash)
             User = user.query.filter_by(emailHash=emailHash).first()
 
             #if email was found
@@ -117,34 +116,40 @@ def returnData():
             if User is not None:
                 
                 print("valid apikey")
-
+                #setup flag
                 serveRequest = False
-                
-                #get datetime in string yyyy-mm-dd hh:mm:ss format
-                timeNow = datetime.datetime.utcnow()
 
-                lastRequestTime = User.timeOfLastRequest
+                timeNow = datetime.datetime.utcnow()
+                
+                #get the last request from this user
+                lastRequest = apiRequest.query.filter_by(user_id=User.id).order_by(apiRequest.dateTime.desc()).first()
 
                 #if first request
-                if lastRequestTime == None:
+                if lastRequest == None:
                     print("first request")
                     serveRequest = True
 
-                elif (timeNow-lastRequestTime).total_seconds() > 20:
+                elif (timeNow-lastRequest.dateTime).total_seconds() > 20:
                     print("request valid")
                     serveRequest = True
+                
+                #create a new request entry 
+                Request = apiRequest(
+                    dateTime = timeNow,
+                    served = serveRequest,
+                    user_id = User.id
+                )
 
-                #update the last attempted request
-                User.timeOfLastRequest = timeNow
+                db.session.add(Request)
                 db.session.commit()
 
                 if serveRequest:
                     return send_from_directory(jsonPath, predictionsFile)
-
+            
         except: 
             #if requests too frequent, send an invalid response back
             return send_from_directory(jsonPath, errorFile)
-
+        
 
     #if api key not/provided or is invalid, send an invalid response back
     return send_from_directory(jsonPath, usageErrorFile)
