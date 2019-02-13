@@ -13,8 +13,14 @@ EUR/USD Price Predictor
 </div>
 
 
-<div id='container'>
-    <canvas id="chart1" width=100% height=50%></canvas>
+
+<div id='barChart'>
+    <canvas id="percentageChart" width=100% height=50%></canvas>
+</div>
+
+
+<div id='lineChart'>
+    <canvas id="priceChart" width=100% height=50%></canvas>
 </div>
 
 
@@ -22,75 +28,129 @@ EUR/USD Price Predictor
 <input id="predictions" type="range" min="1" max="5" value=3 step="1">
 
 
-
 <script>
 
-    var ctx = document.getElementById('chart1').getContext('2d')
     var historicSlider = document.getElementById('historic')
     var predictSlider = document.getElementById('prediction')
-
-    var labels = {{timeLabels|safe}}
-    var predictions = {{predictions|safe}}
-
+    
     var noPrev = 40
-    var toPredict = 6
-    //put data in x/y form for the predictions
-    var timesteps = [0, 1, 2, 4, 8, 16, 32]
-    var predictionPoints = []
+    var toPredict = 4
+    
+    var labels = {{timeLabels|safe}}
 
-    for(var i = 0 ; i < toPredict + 1 ; i ++) {
+    var timesteps = [0, 1, 2, 4, 8, 16, 32]
+    var predictions = {{predictions|safe}}
+    var stDevs = {{stDevs|safe}}
+
+    var predictionPoints = []
+    var plusStDev = []
+    var minusStDev = []
+
+
+    //put data in x/y form for the predictions
+    for(var i = 0 ; i < 7 ; i ++) {
         var xVal = 100 + timesteps[i] - 1
         predictionPoints.push({
                 x: labels[xVal], 
                 y: predictions[i]
         })
+        plusStDev.push({
+                x: labels[xVal], 
+                y: predictions[i] + stDevs[i]
+        })
+        minusStDev.push({
+                x: labels[xVal], 
+                y: predictions[i] - stDevs[i]
+        })
     }
 
-    var myChart = new Chart(ctx, {
-        type: 'line',
+
+    var accuracy = document.getElementById('percentageChart').getContext('2d')
+    var percentageChart = new Chart(accuracy, {
+        type: 'bar',
         data: {
-            labels: {{timeLabels|safe}}.slice(100-noPrev, 100 + timesteps[toPredict]),
+            labels: ["+1", "+2", "+4", "+8", "+16", "+32"],
             datasets: [
                 {
-                    label: 'Close Price',
-                    data: {{closePrices|safe}}.slice(100-noPrev, 100),
-                    borderColor: '#3399ff',
-                    fill: false,
-                    tension: 0
-                },
-                {
-                    label: 'High Price',
-                    data: {{highPrices|safe}}.slice(100-noPrev, 100),
-                    borderColor: "#ff9900",
-                    fill: 2,
-                    tension: 0
-                },
-                {
-                    label: 'Low Price',
-                    data: {{lowPrices|safe}}.slice(100-noPrev, 100),
-                    borderColor: "#33ff33",
-                    fill: false,
-                    tension: 0
-                },
-                {
-                    label: 'Predictions',
-                    data: predictionPoints,
-                    borderColor: "#953ecd",
-                    fill: false
+                    label: 'Percentage predicted within low/high price',
+                    backgroundColor: '#40A2ff',
+                    data: {{percentages|safe}},
                 }
             ]
         },
         options: {
             responsive: true,
-            bezier: false,
             title: {
                 display: true,
-                text: 'Historic data and predictions'
+                text: 'Recent Percentage Accuracy'
             }
         }
     });
 
 
+    var price = document.getElementById('priceChart').getContext('2d')
+    var PriceChart = getPriceChart()
+    
+    function getPriceChart()
+    {
+        var PriceChart = new Chart(price, {
+            type: 'line',
+            data: {
+                labels: {{timeLabels|safe}}.slice(100-noPrev, 100 + timesteps[toPredict]),
+                datasets: [
+                    {
+                        label: 'Close Price',
+                        data: {{closePrices|safe}}.slice(100-noPrev, 100),
+                        borderColor: '#3399ff',
+                        fill: false,
+                        tension: 0
+                    },
+                    {
+                        label: 'High Price',
+                        data: {{highPrices|safe}}.slice(100-noPrev, 100),
+                        borderColor: "#ff9900",
+                        fill: 2,
+                        tension: 0
+                    },
+                    {
+                        label: 'Low Price',
+                        data: {{lowPrices|safe}}.slice(100-noPrev, 100),
+                        borderColor: "#ff9900",
+                        fill: false,
+                        tension: 0
+                    },
+                    {
+                        label: 'Predictions',
+                        data: predictionPoints.slice(0, toPredict+1),
+                        borderColor: "#32cd32",
+                        fill: false
+                    },
+                    {
+                        label: '+1 St. Dev',
+                        data: plusStDev.slice(0, toPredict+1),
+                        borderColor: "#953ecd",
+                        fill: 5
+                    },
+                    {
+                        label: '-1 St. Dev',
+                        data: minusStDev.slice(0, toPredict+1),
+                        borderColor: "#953ecd",
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                bezier: false,
+                title: {
+                    display: true,
+                    text: 'Historic data and predictions'
+                }
+            }
+        });
+
+        return PriceChart
+    }
 
 
 </script>

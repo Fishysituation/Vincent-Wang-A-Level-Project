@@ -71,8 +71,18 @@ def home():
         for key, value in data["Predictions"].items():
             predictions.append(value)
 
+        percentages = []
+        for key, value in data["Meta Data"]["Recent Percentage Correct"].items():
+            percentages.append(value)
+
+        stDevs = [0]
+        for key, value in data["Meta Data"]["Recent Standard Deviation Error"].items():
+            stDevs.append(value)
+
     #load in predictions from the api json file 
     #print(predictions)
+    print(percentages)
+    print(stDevs)
 
     return render_template("home.html",
                         timeNow=time, 
@@ -81,6 +91,8 @@ def home():
                         highPrices=highPrices,
                         closePrices=closePrices,
                         lowPrices=lowPrices,
+                        percentages=percentages,
+                        stDevs=stDevs,
                         predictions=predictions)
 
 

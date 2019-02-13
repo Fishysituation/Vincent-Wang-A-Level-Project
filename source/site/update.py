@@ -43,7 +43,7 @@ def getPriceData():
 
         for key in data.keys():
             #if error message returned
-            if key == 'Error Message' or key == "Note:":
+            if key == 'Error Message' or key == "Note":
                 return returnPrevious()
 
         print("Get successful.")
@@ -83,6 +83,7 @@ def getDateString(dateTime):
 
 
 def retrievePrediction(entry, timestep):
+    print(entry)
     if timestep == 1:
         return entry.pred15
     elif timestep == 2:
@@ -121,7 +122,9 @@ def assessPredictions(priceData, time, timestep):
         #get the label in the json data with the prediction + offset time
         predTime = getDateString(predictions[i].dateTime + datetime.timedelta(minutes=15*timestep))
         ohlc = priceData[predTime]
+        print(timestep)
         predPrice = retrievePrediction(predictions[i], timestep)
+        print(predPrice)
 
         if predPrice < float(ohlc["2. high"]) and predPrice > float(ohlc["3. low"]):
             totalCorrect += 1
@@ -145,7 +148,7 @@ def getPredictions(time, priceData):
 
         percentages = []
         stdevs = []
-        for i in range(0, 7):
+        for i in range(0, 6):
             percentage, stdev = assessPredictions(priceData, time, 2**i)
             percentages.append(percentage)
             stdevs.append(stdev)
