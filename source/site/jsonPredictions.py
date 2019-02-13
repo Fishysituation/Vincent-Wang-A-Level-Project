@@ -51,9 +51,7 @@ def loadNet(path):
     return net, int(data[1])
 
 
-def predict(time):
-    #TODO do actually do this properly 
-    recentAccuracy = [100, 100, 100, 100, 100, 100]
+def predict(time, percentages, stdevs):
 
     allData = getData(dataPath)
 
@@ -62,7 +60,8 @@ def predict(time):
     jsonData['Meta Data']['Time'] = time
     #to add to 
 
-    jsonData['Meta Data']['Recent Accuracy'] = {}
+    jsonData['Meta Data']['Recent Percentage Correct'] = {}
+    jsonData['Meta Data']['Recent Standard Deviation Error'] = {}
 
     jsonData['Predictions'] = {}
 
@@ -87,7 +86,8 @@ def predict(time):
         """
 
         key = '+{}mins'.format(15*(2**i))
-        jsonData['Meta Data']['Recent Accuracy'][key] = recentAccuracy[i]
+        jsonData['Meta Data']['Recent Percentage Correct'][key] = percentages[i]
+        jsonData['Meta Data']['Recent Standard Deviation Error'][key] = stdevs[i]
         jsonData['Predictions'][key] = prediction
 
     with open(outPath, 'w') as outfile:
