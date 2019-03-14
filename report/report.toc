@@ -1,0 +1,37 @@
+\contentsline {part}{I\hspace {1em}Analysis}{3}
+\contentsline {section}{\numberline {1}Research}{3}
+\contentsline {subsection}{\numberline {1.1}Forex Trading}{3}
+\contentsline {subsubsection}{\numberline {1.1.1}Mechanics of Trading}{4}
+\contentsline {subsubsection}{\numberline {1.1.2}Buying vs Selling}{4}
+\contentsline {subsubsection}{\numberline {1.1.3}Broker Fees}{5}
+\contentsline {subsubsection}{\numberline {1.1.4}Trading on Leverage}{5}
+\contentsline {subsubsection}{\numberline {1.1.5}Stop Orders}{6}
+\contentsline {subsubsection}{\numberline {1.1.6}"2\% Rule"}{6}
+\contentsline {subsubsection}{\numberline {1.1.7}Open High Low Close}{6}
+\contentsline {subsubsection}{\numberline {1.1.8}Why Trade Forex?}{7}
+\contentsline {section}{\numberline {2}Proposed Solution}{8}
+\contentsline {section}{\numberline {3}Specification}{8}
+\contentsline {subsection}{\numberline {3.1}Justification}{8}
+\contentsline {part}{II\hspace {1em}Design}{9}
+\contentsline {section}{\numberline {4}Networks}{9}
+\contentsline {subsection}{\numberline {4.1}Data in/out}{9}
+\contentsline {subsection}{\numberline {4.2}Proposed Networks}{9}
+\contentsline {subsection}{\numberline {4.3}Training Process}{10}
+\contentsline {subsubsection}{\numberline {4.3.1}First Network}{10}
+\contentsline {subsubsection}{\numberline {4.3.2}LSTM Network}{12}
+\contentsline {subsection}{\numberline {4.4}Measuring Success}{14}
+\contentsline {subsection}{\numberline {4.5}Final networks}{15}
+\contentsline {section}{\numberline {5}User Interface}{15}
+\contentsline {subsection}{\numberline {5.1}Layout}{15}
+\contentsline {section}{\numberline {6}API}{15}
+\contentsline {subsection}{\numberline {6.1}Data Returned}{15}
+\contentsline {subsection}{\numberline {6.2}Signing Up}{16}
+\contentsline {subsection}{\numberline {6.3}Email Hashing}{16}
+\contentsline {section}{\numberline {7}Backend}{16}
+\contentsline {subsection}{\numberline {7.1}Dataflow}{16}
+\contentsline {subsubsection}{\numberline {7.1.1}Updating data}{16}
+\contentsline {subsubsection}{\numberline {7.1.2}Feeding data to networks}{17}
+\contentsline {subsection}{\numberline {7.2}Database}{17}
+\contentsline {part}{III\hspace {1em}Final Design}{17}
+\contentsline {part}{IV\hspace {1em}Testing}{17}
+\contentsline {part}{V\hspace {1em}Evaluation}{17}

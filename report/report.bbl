@@ -59,4 +59,12 @@ Staff, I.  \harvardyearleft 2018\harvardyearright , `Ohlc chart'.
 {\em The cost of trading forex}  \harvardyearleft n.d.\harvardyearright .
 \newline\harvardurl{https://learn.tradimo.com/dont-go-broke-protect-your-capital/the-cost-of-trading-forex}
 
+\harvarditem[{van den Oord} et~al.]{{van den Oord}, {Dieleman}, {Zen},
+  {Simonyan}, {Vinyals}, {Graves}, {Kalchbrenner}, {Senior} \harvardand\
+  {Kavukcuoglu}}{2016}{wavenet}
+{van den Oord}, A., {Dieleman}, S., {Zen}, H., {Simonyan}, K., {Vinyals}, O.,
+  {Graves}, A., {Kalchbrenner}, N., {Senior}, A. \harvardand\ {Kavukcuoglu}, K.
+   \harvardyearleft 2016\harvardyearright , `{WaveNet: A Generative Model for
+  Raw Audio}', {\em arXiv e-prints} p.~arXiv:1609.03499.
+
 \end{thebibliography}

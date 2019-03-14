@@ -1,9 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.9.17)  19 NOV 2018 12:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.9.17)  14 MAR 2019 11:24
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**report.tex
-(./report.tex
+**/home/vincent/Documents/Projects/A-Level/project/report/report.tex
+(/home/vincent/Documents/Projects/A-Level/project/report/report.tex
 LaTeX2e <2017-04-15>
 Babel <3.12> and hyphenation patterns for 84 language(s) loaded.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/article.cls
@@ -22,68 +23,50 @@ File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-)
-(./formatting.tex
-(/usr/local/texlive/2017/texmf-dist/tex/latex/natbib/natbib.sty
+) (/home/vincent/Documents/Projects/A-Level/project/report/formatting.tex (/usr/local/texlive/2017/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip43
 \bibsep=\skip44
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count87
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/keyval.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphics.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/trig.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 99.
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2017/06/24 v1.0g Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grffile.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grffile.sty
 Package: grffile 2016/05/16 v1.17 Extended file name support for graphics (HO)
-
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
-)
-(/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
-
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-)
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-)
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
@@ -91,10 +74,8 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
-)))
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
-Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
-)
+))) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO)
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
@@ -104,11 +85,9 @@ Package grffile Info: Option `multidot' is set to `true'.
 Package grffile Info: Option `extendedchars' is set to `false'.
 Package grffile Info: Option `space' is set to `true'.
 Package grffile Info: \Gin@ii of package `graphicx' fixed on input line 486.
-))
-(/usr/local/texlive/2017/texmf-dist/tex/latex/parskip/parskip.sty
+)) (/usr/local/texlive/2017/texmf-dist/tex/latex/parskip/parskip.sty
 Package: parskip 2001/04/09 non-zero parskip adjustments
-)
-(./report.aux)
+) (/home/vincent/Documents/Projects/A-Level/project/report/report.aux)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
@@ -123,8 +102,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
 LaTeX Font Info:    ... okay on input line 7.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
 LaTeX Font Info:    ... okay on input line 7.
-
-(/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count88
 \scratchdimen=\dimen105
@@ -139,23 +117,17 @@ LaTeX Font Info:    ... okay on input line 7.
 \everyMPtoPDFconversion=\toks16
 ) (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-
-(/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+ (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
 ))
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-38.
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 438.
 Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
-
-(/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 8.
@@ -163,25 +135,49 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 8.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 8.
+ [1
 
-[1
+{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (/home/vincent/Documents/Projects/A-Level/project/report/report.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 3.
+ [1])
+\tf@toc=\write3
+\openout3 = `report.toc'.
 
-{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-(./sections/analysis.tex
-<images/analysis/sterling_plummet.png, id=8, 484.90839pt x 385.44pt>
+ [2] (/home/vincent/Documents/Projects/A-Level/project/report/sections/analysis.tex
+
+Package natbib Warning: Citation `brokernotes_2018' on page 3 undefined on input line 21.
+
+
+Package natbib Warning: Citation `hannah_2017' on page 3 undefined on input line 23.
+
+<images/analysis/sterling_plummet.png, id=17, 484.90839pt x 385.44pt>
 File: images/analysis/sterling_plummet.png Graphic file (type png)
 <use images/analysis/sterling_plummet.png>
-Package pdftex.def Info: images/analysis/sterling_plummet.png  used on input li
-ne 27. on input line 27.
-Package pdftex.def Info: Requested size: 276.00105pt x 219.38548pt on input lin
-e 27.
- [1 <./images/analysis/sterling_plummet.png>] [2]
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 58.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 58.
-Missing character: There is no ¬ in font cmr10!
-Missing character: There is no £ in font cmr10!
+Package pdftex.def Info: images/analysis/sterling_plummet.png  used on input line 27. on input line 27.
+Package pdftex.def Info: Requested size: 276.00105pt x 219.38548pt on input line 27.
+
+Package natbib Warning: Citation `bbc_news_2016' on page 3 undefined on input line 28.
+
+
+Package natbib Warning: Citation `bbc_news_2016' on page 3 undefined on input line 32.
+
+[3 </home/vincent/Documents/Projects/A-Level/project/report/images/analysis/sterling_plummet.png>]
+
+Package natbib Warning: Citation `hannah_2017' on page 4 undefined on input line 37.
+
+
+Package natbib Warning: Citation `russell' on page 4 undefined on input line 48.
+
+[4]
+
+Package natbib Warning: Citation `tradimo_cost' on page 5 undefined on input line 56.
+
+
+Package natbib Warning: Citation `llc_2016' on page 5 undefined on input line 60.
+
 Missing character: There is no ¬ in font cmr10!
 Missing character: There is no £ in font cmr10!
 Missing character: There is no ¬ in font cmr10!
@@ -191,45 +187,119 @@ Missing character: There is no £ in font cmr10!
 Missing character: There is no ¬ in font cmr10!
 Missing character: There is no £ in font cmr10!
 
-[3]
-<images/analysis/OHLC_chart.png, id=25, 732.7375pt x 321.2pt>
+Package natbib Warning: Citation `lioudis_2018' on page 5 undefined on input line 67.
+
+Missing character: There is no ¬ in font cmr10!
+Missing character: There is no £ in font cmr10!
+
+Package natbib Warning: Citation `momoh_2018' on page 5 undefined on input line 72.
+
+[5]
+
+Package natbib Warning: Citation `staff_2017' on page 6 undefined on input line 77.
+
+
+Package natbib Warning: Citation `investopedia_OHLC' on page 6 undefined on input line 86.
+
+
+Package natbib Warning: Citation `barchart_OHLC' on page 6 undefined on input line 88.
+
+<images/analysis/OHLC_chart.png, id=31, 732.7375pt x 321.2pt>
 File: images/analysis/OHLC_chart.png Graphic file (type png)
 <use images/analysis/OHLC_chart.png>
-Package pdftex.def Info: images/analysis/OHLC_chart.png  used on input line 104
-. on input line 104.
-Package pdftex.def Info: Requested size: 276.00105pt x 120.98882pt on input lin
-e 104.
+Package pdftex.def Info: images/analysis/OHLC_chart.png  used on input line 92. on input line 92.
+Package pdftex.def Info: Requested size: 276.00105pt x 120.98882pt on input line 92.
+
+Package natbib Warning: Citation `barchart_OHLC' on page 6 undefined on input line 93.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/analysis/candlestick_chart.png, id=26, 732.7375pt x 321.2pt>
+
+Package natbib Warning: Citation `candlestick_OHLC' on page 6 undefined on input line 97.
+
+<images/analysis/candlestick_chart.png, id=32, 732.7375pt x 321.2pt>
 File: images/analysis/candlestick_chart.png Graphic file (type png)
 <use images/analysis/candlestick_chart.png>
-Package pdftex.def Info: images/analysis/candlestick_chart.png  used on input l
-ine 113. on input line 113.
-Package pdftex.def Info: Requested size: 276.00105pt x 120.98882pt on input lin
-e 113.
+Package pdftex.def Info: images/analysis/candlestick_chart.png  used on input line 101. on input line 101.
+Package pdftex.def Info: Requested size: 276.00105pt x 120.98882pt on input line 101.
+
+Package natbib Warning: Citation `candlestick_OHLC' on page 6 undefined on input line 102.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[4]) (./sections/design.tex) (./sections/finalDesign.tex) (./report.bbl
-[5 <./images/analysis/OHLC_chart.png> <./images/analysis/candlestick_chart.png>
-]
-! Missing $ inserted.
+[6]
+
+Package natbib Warning: Citation `investopedia_beginner' on page 7 undefined on input line 113.
+
+[7 </home/vincent/Documents/Projects/A-Level/project/report/images/analysis/OHLC_chart.png> </home/vincent/Documents/Projects/A-Level/project/report/images/analysis/candlestick_chart.png>]) (/home/vincent/Documents/Projects/A-Level/project/report/sections/design.tex [8]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 27.
+ (/usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 27.
+ [9]
+
+Package natbib Warning: Citation `wavenet' on page 10 undefined on input line 33.
+
+
+Package natbib Warning: Citation `wavenet' on page 10 undefined on input line 39.
+
+[10]
+<images/design/Conv-Net.png, id=51, 337.26pt x 192.72pt>
+File: images/design/Conv-Net.png Graphic file (type png)
+<use images/design/Conv-Net.png>
+Package pdftex.def Info: images/design/Conv-Net.png  used on input line 61. on input line 61.
+Package pdftex.def Info: Requested size: 276.00105pt x 157.71675pt on input line 61.
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ú in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+<images/design/overfit.png, id=53, 601.24625pt x 331.2375pt>
+File: images/design/overfit.png Graphic file (type png)
+<use images/design/overfit.png>
+Package pdftex.def Info: images/design/overfit.png  used on input line 72. on input line 72.
+Package pdftex.def Info: Requested size: 276.00105pt x 152.05772pt on input line 72.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ú in font cmr10!
+Missing character: There is no ‚ in font cmr10!
+Missing character: There is no Ä in font cmr10!
+Missing character: There is no ù in font cmr10!
+[11 </home/vincent/Documents/Projects/A-Level/project/report/images/design/Conv-Net.png>]
+<images/design/LSTM-Net.png, id=58, 301.125pt x 189.70876pt>
+File: images/design/LSTM-Net.png Graphic file (type png)
+<use images/design/LSTM-Net.png>
+Package pdftex.def Info: images/design/LSTM-Net.png  used on input line 92. on input line 92.
+Package pdftex.def Info: Requested size: 276.00105pt x 173.89732pt on input line 92.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[12 </home/vincent/Documents/Projects/A-Level/project/report/images/design/overfit.png>] [13 </home/vincent/Documents/Projects/A-Level/project/report/images/design/LSTM-Net.png>]
+<images/design/240-50-30-1.png, id=68, 462.528pt x 346.896pt>
+File: images/design/240-50-30-1.png Graphic file (type png)
+<use images/design/240-50-30-1.png>
+Package pdftex.def Info: images/design/240-50-30-1.png  used on input line 120. on input line 120.
+Package pdftex.def Info: Requested size: 276.00105pt x 207.01175pt on input line 120.
+ [14 </home/vincent/Documents/Projects/A-Level/project/report/images/design/240-50-30-1.png>] [15] [16]) (/home/vincent/Documents/Projects/A-Level/project/report/sections/finalDesign.tex) (/home/vincent/Documents/Projects/A-Level/project/report/sections/testing.tex) (/home/vincent/Documents/Projects/A-Level/project/report/sections/evaluation.tex) (/home/vincent/Documents/Projects/A-Level/project/report/report.bbl
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:11: Missing $ inserted.
 <inserted text> 
                 $
 l.11 ...alogue.com/methods/candlestick_chart.html}
                                                   
-? go
-Type <return> to proceed, S to scroll future error messages,
-R to run without stopping, Q to run quietly,
-I to insert something, E to edit your file,
-1 or ... or 9 to ignore the next 1 to 9 tokens of input,
-H for help, X to quit.
-? R
-OK, entering \nonstopmode...
-! Extra }, or forgotten $.
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:11: Extra }, or forgotten $.
 <recently read> \egroup 
                         
 l.11 ...alogue.com/methods/candlestick_chart.html}
@@ -240,7 +310,7 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-! Missing $ inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:12: Missing $ inserted.
 <inserted text> 
                 $
 l.12 
@@ -248,7 +318,7 @@ l.12
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-! Missing } inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:12: Missing } inserted.
 <inserted text> 
                 }
 l.12 
@@ -259,13 +329,12 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
-
+[17]
 Underfull \hbox (badness 10000) in paragraph at lines 14--17
-\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://www.independent.co.uk/money/begi
-nners-guide-to-
+\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://www.independent.co.uk/money/beginners-guide-to-
  []
 
-! Missing $ inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:21: Missing $ inserted.
 <inserted text> 
                 $
 l.21 ....com/articles/forex/07/forex_leverage.asp}
@@ -273,7 +342,7 @@ l.21 ....com/articles/forex/07/forex_leverage.asp}
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-! Extra }, or forgotten $.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:21: Extra }, or forgotten $.
 <recently read> \egroup 
                         
 l.21 ....com/articles/forex/07/forex_leverage.asp}
@@ -284,7 +353,7 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-! Missing $ inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:22: Missing $ inserted.
 <inserted text> 
                 $
 l.22 
@@ -292,7 +361,7 @@ l.22
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-! Missing } inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:22: Missing } inserted.
 <inserted text> 
                 }
 l.22 
@@ -305,11 +374,10 @@ my insertion and my current dilemma will both disappear.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
-\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://www.investopedia.com/articles/fo
-rex/11/why-trade-
+\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://www.investopedia.com/articles/forex/11/why-trade-
  []
 
-! Missing $ inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:39: Missing $ inserted.
 <inserted text> 
                 $
 l.39 ...avizcatalogue.com/methods/OHLC_chart.html}
@@ -317,7 +385,7 @@ l.39 ...avizcatalogue.com/methods/OHLC_chart.html}
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-! Extra }, or forgotten $.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:39: Extra }, or forgotten $.
 <recently read> \egroup 
                         
 l.39 ...avizcatalogue.com/methods/OHLC_chart.html}
@@ -328,7 +396,7 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-! Missing $ inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:40: Missing $ inserted.
 <inserted text> 
                 $
 l.40 
@@ -336,7 +404,7 @@ l.40
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-! Missing } inserted.
+/home/vincent/Documents/Projects/A-Level/project/report/report.bbl:40: Missing } inserted.
 <inserted text> 
                 }
 l.40 
@@ -349,41 +417,41 @@ my insertion and my current dilemma will both disappear.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 46--49
-\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://www.thebalance.com/what-it-means
--to-go-short-in-
+\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://www.thebalance.com/what-it-means-to-go-short-in-
  []
 
 
 Underfull \hbox (badness 6268) in paragraph at lines 59--61
-\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://learn.tradimo.com/dont-go-broke-
-protect-your-capital/the-
+\OT1/cmr/bx/n/10 URL: \OT1/cmr/m/it/10 https://learn.tradimo.com/dont-go-broke-protect-your-capital/the-
  []
 
-) [6] (./report.aux) ) 
+)
+
+Package natbib Warning: There were undefined citations.
+
+[18] (/home/vincent/Documents/Projects/A-Level/project/report/report.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 1999 strings out of 492990
- 29108 string characters out of 6132621
- 88962 words of memory out of 5000000
- 5532 multiletter control sequences out of 15000+600000
- 8548 words of font info for 30 fonts, out of 8000000 for 9000
+ 2052 strings out of 492990
+ 31646 string characters out of 6132621
+ 89541 words of memory out of 5000000
+ 5570 multiletter control sequences out of 15000+600000
+ 8907 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,8n,28p,999b,225s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr6.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
-.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pf
-b></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
->
-Output written on report.pdf (7 pages, 213669 bytes).
+ 38i,8n,28p,1055b,225s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on /home/vincent/Documents/Projects/A-Level/project/report/report.pdf (19 pages, 389230 bytes).
 PDF statistics:
- 75 PDF objects out of 1000 (max. 8388607)
- 51 compressed objects within 1 object stream
+ 130 PDF objects out of 1000 (max. 8388607)
+ 84 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

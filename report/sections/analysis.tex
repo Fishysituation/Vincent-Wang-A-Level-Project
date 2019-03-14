@@ -10,9 +10,9 @@ Problem sufficiently well modelled to be of use in subsequent stages.
 \fi
 
 
-\graphicspath{{images/analysis/}}
-
 \part{Analysis}
+
+    \graphicspath{{images/analysis/}}
 
     \section{Research}
     
@@ -73,21 +73,9 @@ Problem sufficiently well modelled to be of use in subsequent stages.
             
 
 
-
-            
             \subsubsection{"2\% Rule"}
             Stop orders can be used to help follow the 2\% rule - a strategy used to balance risk and reward in which a trader risks no more than 2\% of their available capital between all trades at any one time. When creating stop orders (and trading on leverage) one might use this to decide on the price to set the stop order at. \cite{staff_2017}
 
-
-
-\iffalse
-            \subsubsection{Gold}
-
-            Historically, the value of gold remains stable 
-
-            
-            \subsubsection{US Treasury Bonds}
-\fi
 
 
             
@@ -124,3 +112,24 @@ Problem sufficiently well modelled to be of use in subsequent stages.
 
             Others however might not trade forex with the intention of directly making money. If a trader was trading US stocks, they might be worried about the potential decline/volatility of the dollar. To offset this - allowing them to still make money off their stock trades overall, they could short USD against Euro\cite{investopedia_beginner}
 
+
+
+    \section{Proposed Solution}
+
+    The solution should be an aide to a day trader, giving short term (intraday) predictions in 15 minute intervals. It will take in data from previous prices in the market, and give some form of prediction of price movements for EUR/USD for a number of different points in the near future (e.g. 30 mins, 1 hour, 2 hours etc.). Neural networks will be used to make these predictions.
+
+    The solution should include a web frontend that displays predictions along with measures of the accuracy of predictions in a graphical form to give users more information with which to make a judgement. This will include an api, with which a user should be able to get all data shown on the web page at a point in time in numerical form to be able to manipulate however they desire.
+
+    Originally it was thought the solution would be one which carries out trades directly, however this was thought to be both too difficult as well as too limited - directly carrying out trades would require committing to a single api broker. In addition, it was thought that there would not be anyone who would be willing to use it as it would mean entrusting one's assets to a service that's out of they don't have much control of. 
+
+
+    \section{Specification}
+        
+    
+    //do Specification table here
+
+
+        
+        \subsection{Justification}
+
+        Justification
