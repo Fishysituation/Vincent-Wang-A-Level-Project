@@ -6,6 +6,7 @@ API
 
 
 {% block navs %}
+<a href="{{ url_for('about') }}" class=navbar-item>About</a>
 <a href="{{ url_for('home') }}" class=navbar-item>Home</a>
 <a href="{{ url_for('api.apiHome') }}" class=navbar-currentPage>API</a>
 {% endblock %}

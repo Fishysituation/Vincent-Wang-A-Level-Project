@@ -57,12 +57,13 @@
     clear: both;
 }
 
-.times h3 {
+.row h3 {
     padding-top: 3%;
 }
 
 .chartContainer{
     text-align: center;
+    padding: 2% 2% 5% 2%;
 }
 
 .bodyContent {

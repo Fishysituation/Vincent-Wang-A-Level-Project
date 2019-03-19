@@ -33,6 +33,10 @@ def getTime(datetime):
     time = str(datetime).split()[1]
     return time[:5]
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 
 @app.route("/")
 def home():

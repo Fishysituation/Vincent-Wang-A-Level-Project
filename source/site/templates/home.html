@@ -5,6 +5,7 @@ Predictions Page
 {% endblock %}
 
 {% block navs %}
+<a href="{{ url_for('about') }}" class=navbar-item>About</a>
 <a href="{{ url_for('home') }}" class=navbar-currentPage>Home</a>
 <a href="{{ url_for('api.apiHome') }}" class=navbar-item>API</a>
 {% endblock %}
@@ -31,8 +32,8 @@ Predictions Page
     <div class=row>
             <div class=column>
                 <h4>Previous data shown:</h4>
-                <input id="historic" type="range" min="10" max="95" value=40 step="5">
-                <input type="text" id="historicText" value="40" disabled>
+                <input id="historic" type="range" min="10" max="95" value=35 step="5">
+                <input type="text" id="historicText" value="35" disabled>
             </div>
             <div class=column>
                 <h4>Predictions Shown:</h4>
