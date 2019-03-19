@@ -33,7 +33,39 @@
     font-weight: 550;
 }
 
-.body-content {
+.row {
+    padding: 2% 2% 5% 2%;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    height: 100%;
+}
+
+.left {
+    width: 40%;
+}
+
+.right {
+    width: 60%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.times h3 {
+    padding-top: 3%;
+}
+
+.chartContainer{
+    text-align: center;
+}
+
+.bodyContent {
     padding: 5px;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
