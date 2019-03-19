@@ -20,9 +20,9 @@ errorFile = 'error.json'
 
 emailRegex = "^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)"
 
-salt = 'OkRLWyqj'
-
 api = Blueprint('api', __name__, template_folder='templates')
+
+salt = 'OkRLWyqj'
 
 
 def createKey():
@@ -45,24 +45,14 @@ def apiHome():
         return render_template("api.html")
     
     elif request.method == "POST":
-        #if email invalid, reject
         #if email already in use, reject
         #if email valid, give key to user and add email/key to database
 
-        email = request.form.get("email")
-        
-        #check if email pattern is valid
-        pattern = re.compile(emailRegex)
-        result = pattern.match(email)
-
-        #re.match objects are always None if no match
-        if result == None:
-            flash("Email is invalid, please try again...")
+        if request.form.get("isValid") != '1':
             return render_template("api.html")
 
         else:
-            #get the hex hash of the email
-            emailHash = hashlib.md5((email+salt).encode()).hexdigest()
+            emailHash = request.form.get("email")
             User = user.query.filter_by(emailHash=emailHash).first()
 
             #if email was found

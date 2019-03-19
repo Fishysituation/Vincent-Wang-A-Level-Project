@@ -7,25 +7,26 @@ EUR/USD Price Predictor
 {% block content %}
 <h1>Forex EUR/USD Price Predictor</h1>
 
-<div class = times>
-    <h3>Current Time: {{timeNow}} (UTC)</h3>
-    <h3>Showing Data for: {{dataTime}} (UTC)<h3>
+<div>
+    <div class = times>
+        <h3>Current Time: {{timeNow}} (UTC)</h3>
+        <h3>Showing Data for: {{dataTime}} (UTC)<h3>
+    </div>
+
+    <div id='barChart'>
+        <canvas id="percentageChart" width=100% height=50%></canvas>
+    </div>
 </div>
 
 
+<input id="historic" type="range" min="10" max="95" value=40 step="5">
+<input id="predictions" type="range" min="2" max="7" value=5 step="1">
 
-<div id='barChart'>
-    <canvas id="percentageChart" width=100% height=50%></canvas>
-</div>
 
 
 <div id='lineChart'>
     <canvas id="priceChart" width=100% height=50%></canvas>
 </div>
-
-
-<input id="historic" type="range" min="10" max="95" value=40 step="5">
-<input id="predictions" type="range" min="2" max="7" value=4 step="1">
 
 
 <script>
@@ -34,8 +35,8 @@ EUR/USD Price Predictor
     var predictSlider = document.getElementById('predictions')
 
 
-    var noPrev = 40//historicSlider.defaultValue
-    var toPredict = 4//predictSlider.defaultValue
+    var noPrev = historicSlider.defaultValue
+    var toPredict = predictSlider.defaultValue
 
     var labels = {{timeLabels|safe}}
 

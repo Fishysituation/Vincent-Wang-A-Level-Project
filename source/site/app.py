@@ -37,7 +37,6 @@ def getTime(datetime):
 @app.route("/")
 def home():
     time = getTime(datetime.datetime.utcnow())
-    
 
     #TODO account for weekend closing so times don't get v confusing
     with open(jsonPath + alphaVantageDataFile) as f:
