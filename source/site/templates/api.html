@@ -4,6 +4,13 @@
     API
 {% endblock %}
 
+
+{% block navs %}
+<a href="{{ url_for('home') }}" class=navbar-item>Home</a>
+<a href="{{ url_for('api.apiHome') }}" class=navbar-currentPage>API</a>
+{% endblock %}
+
+
 {% block content %}
 
     <h2>Get an API key</h2>

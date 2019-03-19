@@ -1,14 +1,19 @@
 {% extends "layout.html" %}
 
 {% block title %}
-EUR/USD Price Predictor
+Predictions Page
+{% endblock %}
+
+{% block navs %}
+<a href="{{ url_for('home') }}" class=navbar-currentPage>Home</a>
+<a href="{{ url_for('api.apiHome') }}" class=navbar-item>API</a>
 {% endblock %}
 
 {% block content %}
-<h1>Forex EUR/USD Price Predictor</h1>
+<h1>Predictions Page</h1>
 
 <div>
-    <div class = times>
+    <div class=times>
         <h3>Current Time: {{timeNow}} (UTC)</h3>
         <h3>Showing Data for: {{dataTime}} (UTC)<h3>
     </div>

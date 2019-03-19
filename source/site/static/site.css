@@ -1,24 +1,36 @@
-.navbar {
-    background-color: lightslategray;
+.title {
+    background-color: DimGray;
     font-size: 1em;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: white;
-    padding: 8px 5px 8px 5px;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: White;
+    padding: 6px 0px 6px 0px;
+}
+
+.title h1 {
+    text-align: center;
+}
+
+.navbar {
+    background-color: LightSlateGray;
+    font-size: 1.2em;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: White;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    padding: 0px 0px 0px 0px;
 }
 
 .navbar a {
     text-decoration: none;
     color: inherit;
+    display: inline-block;
+    padding: 20px;
 }
 
-.navbar-brand {
-    font-size: 1.2em;
-    font-weight: 600;
-}
-
-.navbar-item {
-    font-variant: small-caps;
-    margin-left: 30px;
+.navbar-currentPage {
+    font-size: 1.1em;
+    font-weight: 550;
 }
 
 .body-content {
