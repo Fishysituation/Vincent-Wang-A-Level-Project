@@ -1,3 +1,5 @@
+<!--About page-->
+
 {% extends "layout.html" %}
 
 {% block title %}
@@ -5,6 +7,7 @@ About
 {% endblock %}
 
 {% block navs %}
+<!--highlight the about heading in the navbar-->
 <a href="{{ url_for('about') }}" class=navbar-currentPage>About</a>
 <a href="{{ url_for('home') }}" class=navbar-item>Home</a>
 <a href="{{ url_for('api.apiHome') }}" class=navbar-item>API</a>
@@ -16,14 +19,14 @@ About
     <h1>About</h1>
 
     <p>
-        This site displays intraday predictions for prices of EUR/USD in 15 minute intervals. Predictions were made using LSTM networks created and trained with the Pytorch framework, with networks being fed only open/high/low/close data. Training data used can be found <a target="blank" href="https://www.kaggle.com/rsalaschile/forex-eurusd-dataset">here</a>. Real time data is retrieved from AlphaVantage's API. Please note that predictions are not updated over the weekend (UTC time).
+        This site displays intraday predictions for prices of EUR/USD in 15 minute intervals. Predictions were made using LSTM networks created and trained with the Pytorch framework, with networks being fed only open/high/low/close data. Training data used can be found <a target="blank" href="https://www.kaggle.com/rsalaschile/forex-eurusd-dataset">here</a>. Real time data is retrieved from AlphaVantage's API. Please note that predictions are not updated over the weekend (10pm Friday to 10pm Sunday UTC time).
     </p>
 
     <h3>Main Page</h3>
     <p>
         The main page displays the prices of up to 95 previous intervals (roughly 24 hours) and predictions up to 8 hours. The range sliders above the price graph can be used to change the number of predictions/previous prices shown. Each series on the chart can be hidden/unhidden by clicking on the series names directly on top of the chart. 
     <br><br>
-        Recent performance (from the last 24 hours) for each prediction is also shown - both in terms of the percentage of predictions made correctly (predictions made within the actual high/low price of the interval), shown at the top of the page in the bar chart, and in terms of the standard deviation error of a prediction, shown by the purple series on the price chart. Both charts were created with <a target="blank" href="https://www.chartjs.org/">Chart.js</a>.
+        Recent performance (from up to the last 24 hours) for each prediction is also shown - both in terms of the percentage of predictions made correctly (predictions made within the actual high/low price of the interval), shown at the top of the page in the bar chart, and in terms of the standard deviation error of a prediction, shown by the purple series on the price chart. Both charts were created with <a target="blank" href="https://www.chartjs.org/">Chart.js</a>.
     </p>
 
     <h3>API</h3>

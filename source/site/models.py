@@ -1,3 +1,7 @@
+"""
+all sqlalchemy database models
+"""
+
 from app import db
 
 class user(db.Model):

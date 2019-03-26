@@ -1,3 +1,6 @@
+"""
+site configurations
+"""
 
 class Config(object):
     SECRET_KEY = 'secret-key'

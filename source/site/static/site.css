@@ -1,3 +1,4 @@
+/*Title banner at top of scrren*/
 .title {
     background-color: DimGray;
     font-size: 1em;
@@ -10,6 +11,7 @@
     text-align: center;
 }
 
+/*navbar styling*/
 .navbar {
     background-color: LightSlateGray;
     font-size: 1.2em;
@@ -21,6 +23,7 @@
     padding: 0px 0px 0px 0px;
 }
 
+
 .navbar a {
     text-decoration: none;
     color: inherit;
@@ -28,6 +31,7 @@
     padding: 20px;
 }
 
+/*make link for current page bold on navbar*/
 .navbar-currentPage {
     font-size: 1.1em;
     font-weight: 550;
@@ -37,12 +41,14 @@
     padding: 2% 2% 5% 2%;
 }
 
+/*default columns as 50% of the width*/
 .column {
     float: left;
     width: 50%;
     height: 100%;
 }
 
+/*40:60 width split*/
 .left {
     width: 40%;
 }
@@ -51,6 +57,7 @@
     width: 60%;
 }
 
+/*clear all after the row class*/
 .row:after {
     content: "";
     display: table;
@@ -61,9 +68,13 @@
     padding-top: 3%;
 }
 
+.weekendMessage{
+    color: red;
+}
+
 .chartContainer{
     text-align: center;
-    padding: 2% 2% 5% 2%;
+    padding: 0% 2% 5% 2%;
 }
 
 .bodyContent {

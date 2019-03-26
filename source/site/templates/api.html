@@ -1,3 +1,5 @@
+<!--Api main page-->
+
 {% extends "layout.html" %}
 
 {% block title %}
@@ -8,6 +10,7 @@ API
 {% block navs %}
 <a href="{{ url_for('about') }}" class=navbar-item>About</a>
 <a href="{{ url_for('home') }}" class=navbar-item>Home</a>
+<!--highlight the API heading in the navbar-->
 <a href="{{ url_for('api.apiHome') }}" class=navbar-currentPage>API</a>
 {% endblock %}
 
@@ -25,6 +28,7 @@ API
         </ul>
     </div>
 
+    <!--From for entering email-->
     <form name="emailForm" id="emailForm" onsubmit="hashEmail()" action="{{url_for('api.apiHome')}}" method="post">
         Enter your email: <br>
         <input type="text" name="email" placeholder="Enter email here">
@@ -43,17 +47,18 @@ API
     
     function hashEmail() {
         //validate email
-        //hash email and send if valid
-
+       
         var email = document.emailForm.email.value
         var regex = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/g;
-
+        
+        //do not hash if invalid
         if (email.match(regex) == null)
         {
             alert("The email entered is invalid, please try again")
             document.emailForm.isValid.value = 0
         }
 
+        //hash email and send if valid
         else
         {
             document.emailForm.email.value = md5(document.emailForm.email.value+salt)

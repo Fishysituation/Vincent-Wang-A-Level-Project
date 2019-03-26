@@ -1,3 +1,9 @@
+"""
+entry point for flask run
+contains about and main page routes
+"""
+
+
 from flask import Flask, render_template, request, flash, redirect, url_for, Response, send_from_directory
 from flask_migrate import Migrate
 
@@ -14,10 +20,13 @@ from update import update
 app = Flask(__name__)
 app.config.from_object(Config)
 
+#init the database
+with app.app_context():
+    db.init_app(app)
+
 app.register_blueprint(api)
 app.register_blueprint(update)
 
-db.init_app(app)
 migrate = Migrate(app, db)
 
 
@@ -29,20 +38,33 @@ predictionsFile = 'predictions.json'
 alphaVantageDataFile = 'data.json'
 
 
+#returns hh:mm time from datetime object
 def getTime(datetime):
     time = str(datetime).split()[1]
     return time[:5]
 
+
+#route for about page
 @app.route("/about")
 def about():
     return render_template("about.html")
 
 
+#route for home page
 @app.route("/")
 def home():
-    time = getTime(datetime.datetime.utcnow())
+    time = datetime.datetime.utcnow()
+    timeString = getTime(time)
 
-    #TODO account for weekend closing so times don't get v confusing
+    weekendMessage = ""
+
+    #check if market is closed because of the weekend
+    if time.weekday() == 4 and time.hour > 22 or time.weekday() == 5 or time.weekday() == 6 and time.hour < 22:
+        print("pass")
+        weekendMessage = "Market is currently closed for the weekend <br> - please check back at 10pm UTC on Sunday"
+
+
+    #get the prices
     with open(jsonPath + alphaVantageDataFile) as f:
         data = json.load(f)
         dataTime = getTime(data["Meta Data"]["4. Last Refreshed"])
@@ -51,6 +73,8 @@ def home():
         highPrices = []
         closePrices = []
         lowPrices = []
+
+        #load in all prices to memory 
         for key, value in data["Time Series FX (15min)"].items():
             timeLabels.append(key.split()[1][:-3])
             highPrices.append(float(value['2. high']))
@@ -62,11 +86,13 @@ def home():
         for i in range(1, 33):
             timeLabels.append('+' + str(i))
 
+        #arrange data in chronological form 
         closePrices.reverse()
         highPrices.reverse()
         lowPrices.reverse()
 
 
+    #load in predictions from the api json file 
     with open(jsonPath + predictionsFile) as f:
         data = json.load(f)
 
@@ -81,14 +107,11 @@ def home():
         stDevs = [0]
         for key, value in data["Meta Data"]["Recent Standard Deviation Error"].items():
             stDevs.append(value)
-
-    #load in predictions from the api json file 
-    #print(predictions)
-    print(percentages)
-    print(stDevs)
+    
 
     return render_template("home.html",
-                        timeNow=time, 
+                        weekendMessage=weekendMessage,
+                        timeNow=timeString, 
                         dataTime=dataTime, 
                         timeLabels=timeLabels,
                         highPrices=highPrices,

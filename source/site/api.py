@@ -1,11 +1,14 @@
+"""
+all routes and functionality for the API
+"""
+
+
 import random, string
 
 from flask import render_template, request, flash, redirect, url_for, Response, send_from_directory, Blueprint
 
 import datetime, time
 import json, requests
-import re
-import hashlib
 
 from app import db
 from models import user, apiRequest
@@ -18,13 +21,10 @@ predictionsFile = 'predictions.json'
 usageErrorFile = 'invalidGet.json'
 errorFile = 'error.json'
 
-emailRegex = "^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)"
-
 api = Blueprint('api', __name__, template_folder='templates')
 
-salt = 'OkRLWyqj'
 
-
+#generate a random 
 def createKey():
     toReturn = ''
     #keep generating keys until a unique one is made
@@ -38,6 +38,7 @@ def createKey():
     return toReturn
 
 
+#route for api page
 @api.route("/api", methods=["GET", "POST"])
 def apiHome():
    
@@ -48,6 +49,7 @@ def apiHome():
         #if email already in use, reject
         #if email valid, give key to user and add email/key to database
 
+        #if email entered was invalid, return to api main page
         if request.form.get("isValid") != '1':
             return render_template("api.html")
 
@@ -73,6 +75,7 @@ def apiHome():
                     dateJoined = date
                 )
 
+                #try to add user entry to database
                 try:
                     db.session.add(newUser)
                     db.session.commit()
@@ -83,12 +86,14 @@ def apiHome():
                     return render_template("api.html")
 
 
+#route for showing api key when valid email is entered
 @api.route("/show_api_key")
 def showKey():
     key = request.args['key']
     return render_template("showKey.html", key=key)
 
 
+#route for api requests
 @api.route("/api/data")
 def returnData():
     #if an api key is provided
@@ -105,7 +110,6 @@ def returnData():
             #if a valid get
             if User is not None:
                 
-                print("valid apikey")
                 #setup flag
                 serveRequest = False
 
@@ -116,11 +120,9 @@ def returnData():
 
                 #if first request
                 if lastRequest == None:
-                    print("first request")
                     serveRequest = True
 
                 elif (timeNow-lastRequest.dateTime).total_seconds() > 20:
-                    print("request valid")
                     serveRequest = True
                 
                 #create a new request entry 

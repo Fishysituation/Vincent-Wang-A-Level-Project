@@ -1,3 +1,5 @@
+<!--Main page-->
+
 {% extends "layout.html" %}
 
 {% block title %}
@@ -6,18 +8,23 @@ Predictions Page
 
 {% block navs %}
 <a href="{{ url_for('about') }}" class=navbar-item>About</a>
+<!--highlight the home heading in the navbar-->
 <a href="{{ url_for('home') }}" class=navbar-currentPage>Home</a>
 <a href="{{ url_for('api.apiHome') }}" class=navbar-item>API</a>
 {% endblock %}
 
 {% block content %}
 
+<!--Display times/prediction percentage accuracies side by side-->
 <div class=row>
     <div class="column left">
         <h1>Predictions Page</h1>
         <div class=times>
             <h3>Current Time: {{timeNow}} (UTC)</h3>
             <h3>Showing Data for: {{dataTime}} (UTC)<h3>
+        </div>
+        <div class=weekendMessage>
+            <h3>{{weekendMessage|safe}}</h3>
         </div>
     </div>
 
@@ -30,6 +37,7 @@ Predictions Page
 
 <div class=chartContainer>
     <div class=row>
+            <!--Sliders and values for amount of data shown on price chart-->
             <div class=column>
                 <h4>Previous data shown:</h4>
                 <input id="historic" type="range" min="10" max="95" value=35 step="5">
@@ -48,7 +56,7 @@ Predictions Page
 </div>
 
 <script>
-
+    
     var historicSlider = document.getElementById('historic')
     var predictSlider = document.getElementById('predictions')
     var historicText = document.getElementById('historicText')
@@ -68,7 +76,7 @@ Predictions Page
     var minusStDev = []
 
 
-    //put data in x/y form for the predictions
+    //put prediction data in x/y form
     for(var i = 0 ; i < 7 ; i ++) {
         var xVal = 100 + timesteps[i] - 1
         predictionPoints.push({
@@ -85,7 +93,7 @@ Predictions Page
         })
     }
 
-
+    //percentage accuracy chart
     var accuracy = document.getElementById('percentageChart').getContext('2d')
     var percentageChart = new Chart(accuracy, {
         type: 'bar',
@@ -104,6 +112,10 @@ Predictions Page
             title: {
                 display: true,
                 text: 'Recent Percentage Accuracy'
+            },
+            ticks: {
+                min: 0, // minimum value
+                max: 100 // maximum value
             }
         }
     });
@@ -112,26 +124,28 @@ Predictions Page
     var price = document.getElementById('priceChart').getContext('2d')
     var PriceChart = getPriceChart()
     
-
+    //if historic price slider changed, update values and redraw chart
     historicSlider.oninput = function() {
         noPrev = this.value
         historicText.value = this.value
         PriceChart = getPriceChart()
     }
 
+    //if prediction slider changed, update values and redraw chart
     predictSlider.oninput = function() {
         toPredict = this.value;
         predictionText.value = this.value - 1
         PriceChart = getPriceChart()
     }
 
-
+    //define the price chart
     function getPriceChart()
     {
         var PriceChart = new Chart(price, {
             type: 'line',
             data: {
                 labels: {{timeLabels|safe}}.slice(100-noPrev, 100 + timesteps[toPredict-1]),
+                //historic data is drawn with straight lines, predictions with bezier curves
                 datasets: [
                     {
                         label: 'Close Price',
@@ -191,3 +205,4 @@ Predictions Page
 </script>
 
 {% endblock %}
+

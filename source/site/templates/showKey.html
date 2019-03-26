@@ -1,16 +1,26 @@
+<!--Page showing user their API key-->
+
 {% extends "layout.html" %}
 
 {% block title %}
     Show Key
 {% endblock %}
 
+{% block navs %}
+<a href="{{ url_for('about') }}" class=navbar-item>About</a>
+<a href="{{ url_for('home') }}" class=navbar-item>Home</a>
+<a href="{{ url_for('api.apiHome') }}" class=navbar-item>API</a>
+{% endblock %}
+
 
 {% block content %}
-    <h3>Your API key is: {{key}} </h3>
-    <p>
-        This key is linked to your email address.
-        <br>Your email address won't be stored.
-        <br><strong>NOTE:</strong> This key will be invalid if not used for longer than a month.
-    </p>
+    <div class=row>
+        <h3>Your API key is: {{key}} </h3>
+        <p>
+            This key is linked to your email address.
+            <br>Your email address won't be stored in never sent or stored in plaintext.
+            <br><strong>NOTE:</strong> This key will be invalid if not used for longer than a month.
+        </p>
+    </div>
 {% endblock %}
 
