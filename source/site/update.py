@@ -222,11 +222,17 @@ def getStats(current, noRemoved):
 
     with app.app.app_context():
         #query tables for stats
+        #number users who have signed up in the last day
         newSignups = user.query.filter(db.between(user.dateJoined, dayBefore, current)).count()
+        #total number of users remaining in the database
         remainingUsers = user.query.count()
+        #number of users who have made a request in the last day
         activeUsers = apiRequest.query.distinct(apiRequest.user_id).filter(db.between(apiRequest.dateTime, dayBefore, current)).count()
+        #total number of requests made in the past day
         totalRequests = apiRequest.query.filter(db.between(apiRequest.dateTime, dayBefore, current)).count()
+        #number of requests that were rejected in the last day 
         rejectedRequests = apiRequest.query.filter(apiRequest.served==0).filter(db.between(apiRequest.dateTime, dayBefore, current)).count()
+        
 
     print("\nDAILY SUMMARY: ")
     print("Users removed: {}".format(noRemoved))
@@ -285,7 +291,7 @@ def activate_job():
                     getPredictions(newTime, newData["Time Series FX (15min)"])
                     time2 = datetime.datetime.utcnow()
 
-                    print("Predictions made and saved in: {} seconds\n".format((time1-time2).total_seconds()))
+                    print("Predictions made and saved in: {} seconds\n".format((time2-time1).total_seconds()))
 
                     check = False
                 else:

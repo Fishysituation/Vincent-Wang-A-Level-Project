@@ -105,7 +105,8 @@ def returnData():
             return send_from_directory(jsonPath, sampleFile)
 
         try:
-            User = user.query.filter_by(apiKey=apiKey).first()
+            #get the last most recent user/apiRequest datetime where the user's apikey is equal to the one entered
+            User = db.session.query(user, apiRequest.dateTime).outerjoin(apiRequest, user.id == apiRequest.user_id).filter(user.apiKey == apiKey).order_by(apiRequest.dateTime.desc()).first()
 
             #if a valid get
             if User is not None:
@@ -114,22 +115,19 @@ def returnData():
                 serveRequest = False
 
                 timeNow = datetime.datetime.utcnow()
-                
-                #get the last request from this user
-                lastRequest = apiRequest.query.filter_by(user_id=User.id).order_by(apiRequest.dateTime.desc()).first()
 
-                #if first request
-                if lastRequest == None:
+                #if no datetime was returned
+                if User[1] == None:
                     serveRequest = True
 
-                elif (timeNow-lastRequest.dateTime).total_seconds() > 20:
+                elif (timeNow-User[1]).total_seconds() > 20:
                     serveRequest = True
                 
                 #create a new request entry 
                 Request = apiRequest(
                     dateTime = timeNow,
                     served = serveRequest,
-                    user_id = User.id
+                    user_id = User[0].id
                 )
 
                 db.session.add(Request)
@@ -137,9 +135,9 @@ def returnData():
 
                 if serveRequest:
                     return send_from_directory(jsonPath, predictionsFile)
-            
+
         except: 
-            #if requests too frequent, send an invalid response back
+            #if error in querying/writing to database send an error file back
             return send_from_directory(jsonPath, errorFile)
         
 
