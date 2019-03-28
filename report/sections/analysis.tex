@@ -10,6 +10,7 @@ Problem sufficiently well modelled to be of use in subsequent stages.
 \fi
 
 
+\newpage
 \part{Analysis}
 
     \graphicspath{{images/analysis/}}
@@ -108,7 +109,7 @@ Problem sufficiently well modelled to be of use in subsequent stages.
 
 
             \subsubsection{Why Trade Forex?}
-            Forex trading attracts people for different reasons. One thing that makes forex attractive is that because movements are small, leverages offered are much larger than those on the stock market. This allows people to start trading effectively with relatively small sums of money. Unlike the stock market, forex is also open 24 hours a day (although retail brokers close on weekends).
+            Forex trading attracts people for different reasons. One thing that makes forex attractive is that because movements are small, leverages offered are much larger than those on the stock market. This allows people to start trading effectively with relatively small sums of money. Unlike the stock market, forex is also open 24 hours a day (although retail brokers close on weekends - from 10pm Friday to 10pm Sunday UTC time).
 
             Others however might not trade forex with the intention of directly making money. If a trader was trading US stocks, they might be worried about the potential decline/volatility of the dollar. To offset this - allowing them to still make money off their stock trades overall, they could short USD against Euro\cite{investopedia_beginner}
 
@@ -118,18 +119,115 @@ Problem sufficiently well modelled to be of use in subsequent stages.
 
     The solution should be an aide to a day trader, giving short term (intraday) predictions in 15 minute intervals. It will take in data from previous prices in the market, and give some form of prediction of price movements for EUR/USD for a number of different points in the near future (e.g. 30 mins, 1 hour, 2 hours etc.). Neural networks will be used to make these predictions.
 
-    The solution should include a web frontend that displays predictions along with measures of the accuracy of predictions in a graphical form to give users more information with which to make a judgement. This will include an api, with which a user should be able to get all data shown on the web page at a point in time in numerical form to be able to manipulate however they desire.
+    The solution should include a web frontend that displays predictions along with measures of the accuracy of predictions in a graphical form to give users more information with which to make a judgement. This will include an API, with which a user should be able to get all data shown on the web page at a point in time in numerical form to be able to manipulate however they desire.
 
     Originally it was thought the solution would be one which carries out trades directly, however this was thought to be both too difficult as well as too limited - directly carrying out trades would require committing to a single api broker. In addition, it was thought that there would not be anyone who would be willing to use it as it would mean entrusting one's assets to a service that's out of they don't have much control of. 
 
 
+            \subsection{End User}
+            The target audience for the project is forex day traders using scalping/intraday strategies -  individuals carrying out short term trades at home who want to get a larger picture and be better informed before carrying out trades. 
+
+            Such users might not have some of the more advanced analytical tools that a trader working in a hedgefund might have for example. Thus this could be a very useful tool for them.
+
+
     \section{Specification}
+            
+    \begin{enumerate}
+        \item \textbf{Predictions} - see ~\ref{} for more details about 
         
-    
-    //do Specification table here
+        \begin{enumerate}
+            \item All trained networks should be compared against specific, measurable critea on unseen test data in order to be able to be used in the final implementation. These criteria cannot be spcified at this point in time as it will be based off the final type of network being used, in order to be used in the final implementation (see ~\ref{sec:Measuring Success}).
+            
+            \item Predictions should be made for times at least 4 hours in the future.
+            
+            \item The networks must be able to take in real-time 15 minute data from the EUR/USD market from 10pm on Friday to 10pm on Sunday (UTC time).
+            
+            \item All predictions must be made within 30 seconds of receiving the real-time price data. 
+            
+            \item The recent accuracy of predictions should be able to be calculated in real time. The measure of accuracy again depends on the type of outputs the network gives and so this will be further elaborated on later in the document (see ~\ref{})
+        
+        \end{enumerate}
+
+        \item \textbf{Webpage}
+        
+        \begin{enumerate}
+            \item The webpage should display predictions of prices as well as previous price data graphically
+            
+            \item The webpage should display the recent accuracies of each network's predictions graphically
+            
+            \item The site should self-explanatory and relatively intuitive for a day trader to use, without too many specifics of its own. Any features and usage of the site should be explained in an "about page".
+        \end{enumerate}
+
+        \item \textbf{API}
+        
+        \begin{enumerate}
+            \item Using an approved, random API key, a user should be able to retrieve all data of predictions and their accuracies numerically in an existing structured format which is easy to work with.
+            
+            \item A user should be able to request a unique API key with little resistance using only their email. A value entered that has already been used or that is an invalid email addresses will not get an API key
+            
+            \item The user's email should never be stored or sent in plaintext to maintain user privacy.
+
+            \item API requests that are made too frequently should not be serviced
+            
+            \item If a user is inactive (makes no requests) for a month, their record will be removed
+            
+            \item All data of user requests should be stored.
+            
+            \item Daily metrics such as number of active of active users, total number of requests, number of requests that weren't serviced should be displayed to the console.
+        
+        \end{enumerate}
 
 
         
+    \end{enumerate}
+
         \subsection{Justification}
+        Justification of the specification points above are as follows 
 
-        Justification
+        \begin{enumerate}
+            \item \textbf{Predictions} 
+            
+            \begin{enumerate}
+                \item Any predictions shown should be "useful" to some extent.
+
+                \item 4 hours was thought to be a useful timeframe for day traders - it would fit with common trading timeframes. https://forextraininggroup.com/best-timeframes-trading-forex/
+                
+                \item Predictions should be shown for all open hours of the market (24/5).
+                
+                \item 30 seconds was thought to be an appropriate max processing time given the timescale of the predictions. This should also help ensure the server does not get overloaded during operation. The EUR/USD market was chosen as it is one of the most widely traded currency pairs and thus the potential user base for the project is large. In addition, this makes sourcing real-time and historic data easier.
+                
+                \item Given the random nature of the forex market, a network could provide better or worse predictions depending on the market behaviour at a certain point in time. Thus having some measure of recent accuracy could be useful to the user, and likely more so than the accuracy of the network on the test data used to assess the network using training.
+            
+            \end{enumerate}
+    
+            \item \textbf{Webpage} A website was chose for the frontend as it is more accessible being platform independent. Additionally most trading services such as brokers and sources of data use web pages so it would be a familiar format for users.
+            
+            \begin{enumerate}
+                \item A graphical format is far easier and quicker to interpret that numerical data. This will allow users to get a feel for the predictions without getting bogged down in the specifics. Having the previous prices along with the predictions will also help users get a better sense of the predictions without having to change tab to look at price data separately.
+                
+                \item Displaying accuracies will allow the user to make a better judgement about the predictions. They should be shown graphically for the same reasons as those stated above.
+                
+                \item The barrier for entry for using the site specifically should be low in order not to deter users. The site should not require any technical knowledge beyond that needed for day trading.
+
+            \end{enumerate}
+    
+            \item \textbf{API}
+            
+            \begin{enumerate}
+                \item Returning data with an API allows the user more flexibility in how they wish to view/handle the predictions. An existing format should be used so that users will have experience/can easily find documentation for how to process the data they receive.
+                
+                \item Using an API key allows for authentication of a user - policing requests and ensuring the user is verified without much overhead.
+                
+                \item It is thought that the users will not need to be contacted, thus emails need not be stored in plaintext. To keep user privacy, emails should not be sent in plaintext either to reduce the impact of MITM attacks.  
+    
+                \item Not servicing requests made too frequently will help ensure good user etiquette and minimize server load.
+                
+                \item Removing inactive users will help reduce the amount of data stored making the API framework faster as querying the database for valid API keys will take as much time.
+                
+                \item In keeping a log of all API requests, metrics regarding the use of the API will be able to be calculated to get some insight into how users use the service and what they might need from the service in the future, aiding future development.
+                
+                \item Some of these simple metrics well help give a sense of the size of the client base and the usage over time.
+            
+            \end{enumerate}
+        
+        \end{enumerate}

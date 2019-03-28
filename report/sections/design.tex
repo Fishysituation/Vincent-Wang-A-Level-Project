@@ -6,15 +6,27 @@
 
     \section{Networks}
         
+        \subsection{Network Frameworks}
+        There were two main contenders for network frameworks to use - Pytorch and Tensorflow. Both of these frameworks are written for python and are widely used, so very well documented.
+
+        In the end pytorch was chosen for its simplicity, versatility and speed of training \textbf{INCLUDE CITATION HERE}. The more high-level features of Tensorflow to do with deployment or distributed training were not needed. 
+
+
         \subsection{Data in/out}
 
         Each model should be able to work with 4 points of data at every time unit: open, high, low, close, or less. This is to fit the structure of incoming/real-world data provided by the AlphaVantage api (FX Intraday). 
 
         To train/test our agents, a dataset of open/high/low/close/volume from a six year period on the EURUSD market with 15 min intervals will be used. We will start tests using an 80/20 split of training data to test data, as this is a good balance between ensuring that the agent learns enough during training and accurately assessing the agent's ability. 
 
-        Neural networks work better when inputs are normalised i.e. take on values between -1, and 1. To achieve this (or at least a proxy for this), raw input values were changed to \textbf{\textit{(actual value - the mean of close prices of the window) * 100}} (the window is the time range for which the network is given inputs) Even for large windows, inputs to the network would very rarely exceed 1 or -1.
+        Neural networks work better when inputs are normalised i.e. take on values between -1, and 1. To achieve this (or at least a proxy for this), raw input values were changed to 
+        
+        \begin{equation}
+        (value - meanClosePriceOfWindow) \times 100
+        \end{equation}
 
-        For outputs the inital plan was to let the network choose from one of three options - the price at a timestep will be within the spread of, or greater/lower than the spread of the most recent timestep. Each option would have a confidence level - the percentage chance the network attributes to that outcome.
+        The window is the time range for which the network is given inputs. Even for large windows, inputs to the network would very rarely exceed 1 or -1.
+
+        For outputs the inital plan was to let the network choose from one of three options - the price at a timestep will be within the spread of, or greater/lower than the spread of the most recent timestep. The spread was chosen for this as broker fees are often in the form of spread \textbf{see **}- the price must "clear" the spread in order for a trade to return a profit and so seeing if a trade will go beyond the spread is useful. Each option would have a confidence level - the percentage chance the network attributes to that outcome.
 
         \subsection{Proposed Networks}
 
@@ -65,7 +77,7 @@
 
             As a preliminary test, it was decided the network should try to overfit \footnote{Overfitting is where a network learns the test data and corresponding outputs it is given instead of being able to generalise and learn which features of the inputs cause certain outputs, thus performing very badly on unseen data. This usually happens when the size of the test data is too small} on a small batch first. The network greatly struggled with this however. On every run the network would either converge on a solution that assigns equal probability to each outcome, or one that always assigns 100\% to the price increasing or decreasing.
 
-            Eventually, using the “Adam” optimiser instead of SGD, the network managed to overfit on the small batch of 20.\footnote{In figure ~\ref{fig:Overfit} the rows above show the output tensors from the network for the last few inputs. Below the expected outputs vs. the network ouput with the largest value (the network prediction)}
+            Eventually, using the “Adam” optimiser instead of SGD, the network managed to overfit on the small batch of 20.\footnote{In Fig.~\ref{fig:Overfit} the rows above show the output tensors from the network for the last few inputs. Below the expected outputs vs. the network ouput with the largest value (the network prediction)}
 
             \begin{figure}[h]
                 \centering
@@ -96,12 +108,18 @@
 
             The network produced what were thought to be far more desirable results, with initial tests able to predict the price in 15 mins correctly within the spread (taken as 0.7 pips) roughly 60\% of the time . This was initially surprising as originally, it was initially thought that predicting the price itself was a more difficult problem than just predicting the discrete movement of the price.
 
-            //predictions here
+            When graphing the prediction values against the actual prices at that timestep however, there was a concern that the networks were only achieving these results as it seemed to be just quoting the most recent close price for as the prediction for future timesteps.
 
-            The concern was that the network seemed to be just quoting the most recent close price at each (see **).
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=0.8\textwidth]{30-40-15-2.png}
+                \caption{Sample prices (blue) against the prediction (orange) made for the price at that timestep 30 minutes (2 timesteps) beforehand}
+                \label{fig:30_predictions}
+            \end{figure}
 
+            In Fig.~\ref{fig:30_predictions}, the predictions series looks almost exactly the same as the actual price series, just displaced 2 timesteps. 
 
-            There were a few suggestions about why this might have been the case and how to improve on it.
+            There were a few ideas about why this might have been the case and how to improve on it.
 
             \begin{itemize}
                 \item \textbf{Too few neurons} The network was not large enough and so couldn't learn the more complex behaviours required.
@@ -118,11 +136,11 @@
             \begin{figure}[h]
                 \centering
                 \includegraphics[width=0.8\textwidth]{240-50-30-1.png}
-                \caption{Sample prices against the prediction made that timestep 4 hours (16 timesteps) beforehand}
+                \caption{Sample prices (blue) against the prediction (orange) made for that timestep 4 hours (16 timesteps) beforehand}
                 \label{fig:240_predictions}
             \end{figure}
 
-            In figure ~\ref{fig:240_predictions} while it does seem that the network mostly seems to be quoting the most recent close price, at many points we can see that it is both over and undershooting peaks and troughs - showing that it is observing trends and making decisions based on data from more than just the last timestep.
+            In Fig.~\ref{fig:240_predictions} while it does seem that the network mostly seems to be quoting the most recent close price, at many points we can see that it is both over and undershooting peaks and troughs - showing that it is observing trends and making decisions based on data from more than just the last timestep.
 
             It was decided that this structure should be used in the final solution.
 
@@ -133,22 +151,49 @@
 
         As discussed above, it seemed as though the network could have been just quoting the most recent close price as the prediction. To test this - ensure the network was making "valid" predictions, a baseline was created by finding the MSE and percentage accuracy of a solution quotes the most recent close price as the prediction for a future timestep. 
 
+        It was decided that that networks would be evaluated against the baseline's MSE and percentage accuracy.
 
-        \subsection{Final networks}
 
-        Using the above critera, the networks that were chosen to be used had the following results
-        \textbf{*yeet a table of the successes in*}
+        \subsection{Saving/Loading Networks}
+        To be able to use the models, the trained parameters need to be saved. This quite straightforward to do in pytorch luckily. The current parameters of a network can be written to a file in a custom pytorch format to save a trained network. To load in a network from this file, when an instance of the original network class is initialised, the file can be parsed to the network. 
         
-`'
+        Thus for each network being used, both the trained parameters and data about the network structure needs to be stored.
+
+
     \section{User Interface}
 
-        \subsection{Layout}
+        The site should have three pages - the "main" page, which displays the predictions and accuracies, an "API" page where a user can get enter an API key as well as see a sample request/sample returned datafile and and "About" page in which the functionality of the site is explained.
+
+        When a user enters a valid email that is not currently in the database, they will be redirected to a separate page that displays their API key and some messages about good usage.
+
+        Using the above, the structure of pages of the site is shown in Fig.~\ref{fig:site_layout}
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.8\textwidth]{Site Layout.png}
+            \caption{Diagram of the layout of the site}
+            \label{fig:site_layout}
+        \end{figure}
+
+        On all there should be a clear navigation bar which allows the user to easily move between pages of the site. There should be some indication of the current page the user is on.
+
+        \subsection{Main Page}
         The predictions should be shown in a concise way graphically so that users viewing predictions via the webpage can more easily interpret the data. All data should be shown on one page.
         
-        It was thought that previous market data, predictions as well as some measure of the precision of the predictions such as standard deviation of error should be displayed on one graph. If possible users should be able to choose how much data is being displayed at one time using sliders. Aon the same page, there should be a chart displaying the recent accuracy of predictions (how often the network correctly predicts the price within the actual high and low of the timestep). 
+        It was thought that previous market data, predictions as well as some measure of the precision of the predictions such as standard deviation of error should be displayed on one graph. If possible users should be able to choose how much historic data/how many predictions are being displayed at one time using sliders. The idea behind this is that it would help users interpret the data better - when all relevant data is displayed on the page the graph it was thought that the graph might appear to be too "noisy". On the same page, there should be a chart displaying the recent accuracy of predictions (how often the network correctly predicts the price within the actual high and low of the timestep). 
 
         On the page the current UTC time and the time of the data being shown should be displayed.
 
+        As the market is closed on weekends/AlphaVantage doesn't update data over the weekend, there should be a message on the home page to tell users that prices aren't being updated if it is between Friday 10pm and Sunday 10pm.
+
+        A mock-up of the main page is shown in Fig.~\ref{fig:main_page_mock} 
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.95\textwidth]{Main page mockup.png}
+            \caption{Mock-up of the main page}
+            \label{fig:main_page_mock}
+        \end{figure}
 
 
     \section{API}
@@ -156,7 +201,7 @@
         \subsection{Data Returned}
         When an API call is made, the server will check if the API key used is valid (is in the list of API keys being used). If it is, then data will be returned, else an error message will be returned.
 
-        Data returned should be in JSON format and include all data that is shown on the webpage in numerical form. JSON was chosen as it is relatively compact, well supported and also allows for more logical represetation and ordering of data with the use of hierarchy. 
+        Data returned should be in JSON format and include all data that is shown on the webpage in numerical form. JSON was chosen as it is relatively compact, well supported and also allows for more logical representation and ordering of data with the use of hierarchy. 
 
         A request should not be served if requests from the user are being made too frequently.
     
@@ -167,35 +212,121 @@
         \subsection{Email Hashing}
         It is thought that the users would never need to be directly contacted and thus the user emails should never be stored or sent in plaintext to ensure user privacy. Were emails sent in plaintext, a "man in the middle" would be able to see the email.
 
-        To ensure this when a user signs up for the service, their email should be hashed on the client side using MD5 with a random salt before being sent to the server. The user will then be shown their API key on the webpage.
+        To ensure this, when a user signs up for the service their email should be hashed on the client side with a random salt before being sent to the server. The user will then be shown their API key on the webpage. The hash algorithm used should not be too complex so as to ensure that there's not too much time between a user entering their email and receiving a response. The size of the hashed value should be large enough that there is a negligible chance of collisions occurring given the number of users who are expected to use service.
+
+        When the hashed email is sent the server on signup, the table of current users will be queried to find if the API key is already being used. If it is, then the user is returned their API key with an existing  
     
 
         
-    \section{Backend}
+    \section{Back-End}
+
+        It was decided that flask should be used as the web framework. Much like pytorch, it is lightweight, versatile, easy to use and the advantages that other similar frameworks such as Django provide were not thought to be necessary for the end product.
 
         \subsection{Dataflow}
-        There should only be one copy of historic data and predictions to ensure data is consistent in all places and updating these is easier. Because of this, the same datafile that can be accessed via the API should be used as the source of data for the webpage.
+        There should only be one copy of historic data and predictions to ensure data is consistent in all places and updating these is easier. Because of this, the same datafile that can be accessed via the API should be used as the source of data for the webpage. This means that all data would be kept in a JSON format as prices retrieved from AlphaVantage are in JSON format and it was decided that predictions returned from the site API would also be JSON.
             
             \subsubsection{Updating data}
-            Every 15 minutes, the server should check for new data from AlphaVantage. Data from the API does not update every 15 minutes on the dot however so the server should keep making API calls until the time of the data changes. AlphaVantage stops fufilling requests if they exceed more than 5 requests a minute or more than 500 requests a day. Given that new data for each 15 minute timestep seemed to come roughly 5 minutes late, a 45 second delay between requests was thought to be appropriate.
+            Every 15 minutes, the server should check for new data from AlphaVantage. Data from the API does not update every 15 minutes on the dot however, so the server should keep making API calls until the time of the data changes. AlphaVantage stops fulfilling requests if they exceed more than 5 requests a minute or more than 500 requests a day. Given that new data for each 15 minute timestep seemed to come roughly 5 minutes late, a 45 second delay between requests was thought to be appropriate.
 
-            \subsubsection{Feeding data to networks}
+            Once new data has come in from AlphaVantage, it should be processed and fed to all the models to produce a new set of predictions as well as compared with previous predictions to determine the recent performance of the networks
+
+            Fig.~\ref{fig:updateDataFlow} shows data flow diagram for the updating process.
+
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=0.8\textwidth]{updateDataFlow.png}
+                \caption{Data flow diagram for the update process}
+                \label{fig:updateDataFlow}
+            \end{figure}
             
-            
-            
+
+        Note above that "Price Data" (data from AlphaVantage) and "Predictions + Accuracy" (data sent by API) are represented as temporary data stores while "Predictions" are a permanent data store. For each new set of 15 minute price data coming in, the JSON files for the price data and the predictions + the accuracy are overwritten with the new values for the current timestep. It was thought that price data would not need to be stored as it will likely be readily available elsewhere if needed. Thus in only storing all predictions, data for predictions is not duplicatied, reducing data store and by using historic price data any new desired statistics about prediction accuracy can still be calculated.
         
         \subsection{Database}
-        The database should be made up of a User table, storing the a hashed email and api key, and a Predictions table, storing the time of the prediction and the value of each prediction. These tables have a many to many relationship and so need a helper table.
+        To allow for the API functionality outlined, each user's email hash and the corresponding needed to be stored as well as the timestamp of the most recent API request to ensure the user is not making requests too frequently. It was thought that keeping a record of all requests could be beneficial as it would allow user metrics such as total and individual activity to be calculated, allowing for an insight into user behaviour. Storing this data would mean that the timestamp of each user's last request need not be stored as it could be found by querying the list of all requests.
+
+        The predictions made at each timestep also needed to be stored to allow for real-time assessing of the networks' ability.
         
-        Tables required 
+        Thus it was decided that the tables required would be as follows
         \begin{itemize}
 
             \item \textbf{User:} Stores Email hash, API key, Date of signing up. 
 
-            \item \textbf{Predictions:} Stores the time the prediction corresponds to and each prediction.
+            \item \textbf{Request:} Stores the time of the request, the user ID and if each request was served.
             
-            \item \textbf{Requests:} Stores User ID, Prediction Time, current time. A helper table for the many to many relationship between the User and Predictions table. Every time a user makes an API request, an entry should be made for this table. This will allow for policing of users making requests too frequently. It will also allow for metrics such as when in the day requests are most frequently made to be calculated. 
-
+            \item \textbf{Predictions:} Stores the timestep that the predictions were made for (i.e. some multiple of 15 minutes <= the time at which predictions were made instead of the time at which the predictions were made themselves) and all the price predictions.
+            
         \end{itemize}
         
+            \subsubsection{Normalisation}
+            The database should be normalised in order to make querying and managing tables easier. It was decided that normalising up to third normal form would be appropriate as forms beyond this are rarely used in practise \textit{add citation https://mariadb.com/kb/en/library/database-normalization-5th-normal-form-and-beyond/}. With the proposed structure, the database will be designed so that it passes all the forms below.
+
+            \begin{itemize}
+
+                \item \textbf{1st Normal Form:} Values in each field must be atomic i.e. each first stores one value. The only consideration for this is the predictions table - each prediction should be in their own column
+                
+                \item \textbf{2nd Normal Form:} Every non-key attribute of a table with a composite key, should depend on the whole key. The request field is the only table that is relevant to this as it has a relation to the user table. To help avoid this, the request table will just user a standard numeric primary key.
+                
+                \item \textbf{3rd Normal Form:} Fields have no dependencies on other non-key fields. The database is quite small overall - there are no problems with non-key dependencies. 
+            
+            \end{itemize}
+
+            \subsubsection{Final Database Structure}
+            Following the discussion above, it was decided the final database structure should be as shown in Fig.~\ref{slidersdb_table}. It satisfies 3rd normal form.
+
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=0.8\textwidth]{tables.png}
+                \caption{Entity relationship diagram}
+                \label{fig:db_table}
+            \end{figure}
+            
+            The user table is defined as follows:
+
+            \begin{tabular}{|p{2cm}|p{2cm}|p{7cm}|}
+                \hline
+                \multicolumn{3}{|c|}{user} \\
+                \hline
+                Field & Type & Description \\
+                \hline
+                id & INT & primary key - uniquely defines each user \\
+                emailHash & VARCHAR (32) & hashed hex value of user's email+salt \\
+                apiKey & VARCHAR (16) & random alphanumeric API key used for requests \\
+                dateJoined & DATETIME & date that the user signed up \\
+                \hline 
+            \end{tabular} 
+
+            The apiRequest table is defined as follows: An integer is being used as a logical boolean as SQLite does not have a boolean type.
+            
+            \begin{tabular}{|p{2cm}|p{2cm}|p{7cm}|}
+                \hline
+                \multicolumn{3}{|c|}{apiRequest} \\
+                \hline
+                Field & Type & Description \\
+                \hline
+                id & INT & primary key - uniquely defines each request \\
+                dateTime & DATETIME & the datetime that the request was made \\
+                served & INT (logical BOOL) & whether or not the request was served (1 is yes, 0 if no) \\
+                user\_id & INT & foreign key to the user table \\
+                \hline
+            \end{tabular}
+            
+            The prediction table is defined as follows:
+
+            \begin{tabular}{|p{2cm}|p{2cm}|p{7cm}|}
+                \hline
+                \multicolumn{3}{|c|}{prediction} \\
+                \hline
+                Field & Type & Description \\
+                \hline
+                dateTime & DATETIME & primary key - the time at which a prediction is made is unique to each set of predictions\\
+                pred15 & FLOAT & the predicted price for 15 mins in the future \\
+                pred30 & FLOAT & the predicted price for 30 mins in the future \\
+                pred60 & FLOAT & the predicted price for 60 mins in the future \\
+                pred120 & FLOAT & the predicted price for 120 mins in the future \\
+                pred240 & FLOAT & the predicted price for 240 mins in the future \\
+                pred480 & FLOAT & the predicted price for 480 mins in the future \\
+                \hline
+            \end{tabular}
+            
             

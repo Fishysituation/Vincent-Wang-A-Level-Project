@@ -1,1 +1,25 @@
+\newpage
 \part{Evaluation}  
+
+    \section{Comments on Testing}
+    The solution passed all the tests outlined in the test plan.
+
+    \section{Comparison with Specification}
+
+    \section{Future Improvements}
+    
+    Assuming that the behaviour of all currency pairs are similar, predictions for different pairs could be added to the site and API without much extra overheard. This would greatly increase the usefulness of the solution to an actual end user, who would likely be trading multiple currency pairs at one time
+
+        \subsection{Predictions}
+        Even though the predictions passed the specified criteria, it was felt a lot more could be done to improve on them.
+        
+        There are many more approaches that could have been taken to predicting prices. The networks took in only the OHLC data, however other data such as the volume traded could also be useful to train the networks on as this could give a sense of the volatility at a given point in time, part of this was due to the limitations of AlphaVantage however, which only provides OHLC data.
+
+        Another prediction model that could be tested is one that builds on previous predictions to make future ones - one network is used to predict the data for the next timestep, and then the same network takes in that prediction to give a prediction for the timestep after that. The potential issue with this design is that at the moment the networks take in 4 datapoints whereas the predictions give out one value.
+
+        One the other hand the targets/outputs of the network could be redesigned. Targets could be the gradient of a regression line of time on price for the range of timesteps from the most recent to the timestep for which the price is being predicted. The most recent close price could be made the origin to help simplify calculations. The network outputs could then be a prediction of the gradient of this line and from this, a prediction of the price can be found. This method is much more focused on the trend of the price rather than a specific value in a point in time and so it is thought that this would give much more satisfactory results.
+
+        \subsection{Site}
+        More could be done to the general apprearance of the site. The layout of the main page especially seems rather bare and patchy and generally the design feels outdated. Using 3rd patry style libraries such as Bootstrap could be a good solution for this.
+
+        The price graph could definitely be improved on as well. Chart.js allowed displaying of historic data and predictions on one graph which was thought to be better for the user - giving a better feel for the data. However historic OHLC data is displayed as 3 separate line series, which is not common practice for financial data. In the future an OHLC bar chart or "Japanese candlestick" chart should be used instead as this would be a far more familiar graph format for users.
