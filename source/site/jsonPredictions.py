@@ -3,12 +3,12 @@ import torch
 import static.nets.lstmPrice
 import json 
 
-netPaths = ["static/nets/15-10-20-1.pth",
-            "static/nets/30-20-20-1.pth",
-            "static/nets/60-20-20-1.pth",
-            "static/nets/120-40-20-1.pth",
-            "static/nets/240-50-30-1.pth",
-            "static/nets/480-80-30-1.pth"]
+netPaths = ["static/nets/15-5-20-1.pth", #checked
+            "static/nets/30-10-20-1.pth", #checked
+            "static/nets/60-20-30-1.pth", #checked
+            "static/nets/120-40-30-1.pth", #checked
+            "static/nets/240-65-30-1.pth", #checked
+            "static/nets/480-90-30-1.pth"] #checked
 
 dataPath = "static/json/data.json"
 outPath = "static/json/predictions.json"

@@ -23,19 +23,22 @@ def iterate(net, means, inputs, targets, noPrev, noEpochs):
         #clear the hidden/cell states
         net.hidden = net.init_hidden()
 
+        #clear the accumulated values in the network and optimiser
         net.zero_grad()
         net.optimizer.zero_grad()
        
+        #pass inputs to network
         out = net(batchIn)
 
+        #calculate the loss
         loss = net.lossFunc(out, batchTa)
 
-        net.train()
+        #back-propagate
         loss.backward(retain_graph=True)
-
         net.optimizer.step()
 
 
+        #display the loss and a sample of the predictions
         if j % 1 == 0:
 
             print("iteration: " + str(j) +  " Loss: " + str(loss.item()))

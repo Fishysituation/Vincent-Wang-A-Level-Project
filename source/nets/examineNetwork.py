@@ -1,5 +1,5 @@
 """
-further train best network
+further train a network
 look at a network's behaviour 
 """
 
@@ -33,7 +33,7 @@ net.load_state_dict(torch.load(networkPath2))
 net.cuda()
 
 
-#get in data
+#get all inputs and targets
 trainIn, trainTa, testIn, testTa = process.get(noPrev, toPredict, dataPath)
 
 
@@ -45,6 +45,8 @@ for i in range(0, 5):
 
 torch.save(net, outPath)
 
+
+#look at a random sample of outputs
 for i in range(0, 10):
     sampleIn, sampleTa = process.getRandom(testIn, testTa, 10)
 

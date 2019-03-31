@@ -41,11 +41,13 @@ def getPriceData():
 
     try:
         response = requests.get(api_url)
-    except: 
-        return returnPrevious()
 
-    if response.status_code == 200:
-        data = json.loads(response.content.decode('utf-8'))
+        if response.status_code == 200:
+            data = json.loads(response.content.decode('utf-8'))
+        """
+        with open("mockData/CSV.csv") as f:
+            data = json.loads(f)
+        """
 
         for key in data.keys():
             #if error message returned
@@ -56,6 +58,9 @@ def getPriceData():
         with open(jsonPath + alphaVantageDataFile, 'w') as f:
             json.dump(data, f, indent=4)
         return data
+
+    except: 
+        return returnPrevious()
 
 
 #save predictions to database
@@ -220,14 +225,16 @@ def getStats(current, noRemoved):
 
     dayBefore = current - datetime.timedelta(days=1)
 
+    print(dayBefore.date())
+
     with app.app.app_context():
         #query tables for stats
         #number users who have signed up in the last day
-        newSignups = user.query.filter(db.between(user.dateJoined, dayBefore, current)).count()
+        newSignups = user.query.filter(db.between(user.dateJoined, dayBefore-datetime.timedelta(minutes = 1), dayBefore+datetime.timedelta(minutes = 1))).count()
         #total number of users remaining in the database
         remainingUsers = user.query.count()
         #number of users who have made a request in the last day
-        activeUsers = apiRequest.query.distinct(apiRequest.user_id).filter(db.between(apiRequest.dateTime, dayBefore, current)).count()
+        activeUsers = db.session.query(apiRequest.user_id).join(user).distinct().count()
         #total number of requests made in the past day
         totalRequests = apiRequest.query.filter(db.between(apiRequest.dateTime, dayBefore, current)).count()
         #number of requests that were rejected in the last day 

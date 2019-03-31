@@ -59,8 +59,7 @@ def home():
     weekendMessage = ""
 
     #check if market is closed because of the weekend
-    if time.weekday() == 4 and time.hour > 22 or time.weekday() == 5 or time.weekday() == 6 and time.hour < 22:
-        print("pass")
+    if time.weekday() == 4 and time.hour > 21 or time.weekday() == 5 or time.weekday() == 6 and time.hour < 22:
         weekendMessage = "Market is currently closed for the weekend <br> - please check back at 10pm UTC on Sunday"
 
 

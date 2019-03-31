@@ -2,16 +2,76 @@
 \part{Evaluation}  
 
     \section{Comments on Testing}
-    The solution passed all the tests outlined in the test plan.
+    The solution passed all the tests outlined in the test plan. Testing was mainly focused on the ability of the site to update, including when unexpected data is retrieved from AlphaVantage, as well as on the functionality of the API provided by the site. The scope of user interaction with the site itself is very limited and so not many tests had to be done on this to ensure the site worked as expected.
+
+    As discussed at length, throughout training there was a concern that networks were converging on solutions which quoted the last close price of the window. This is what motivated the "baseline" that the networks should be compared to. Even though the qualitative prediction tests in 12.2 were very promising, results in 12.1 show that 2 of the 6 networks (predicting the 2 hour and 8 hour prices respectively) produced larger MSE values than the baseline on the test data. This is likely due to the stochastic nature of the market. The price could easily move in any direction and thus predicting the most recent close price as the expected price at a point in the future is often a very good, if not the most effective overall prediction, even though it is not very "useful" for a user to see.
+
+    Overall testing of the predictions themselves was thought to be very successful as it was shown the networks are able to predict trends more effectively than was suspected when the networks were being trained. In addition, all networks had a percentage accuracy greater than 50\% (one of the two criteria specified in 6.5)
 
     \section{Comparison with Specification}
+    The solution met all the specification points outlined \textit{(see 5)}. The way in which they were met is outlined below:
+
+    \item \textbf{Predictions}
+    \begin{enumerate}
+        
+        \item Networks making predictions up to 8 hours were produced. Even though the predictions for the 8 hour mark did not pass the baseline, the predictions made were thought to still be useful to the end user and so this was included in the solution.
+        
+        \item The networks took in real-time data from AlphaVantage every 15 minutes.
+        
+        \item Predictions at worst took 5 seconds to be made and saved to json/the database
+        
+        \item Percentage accuracies as well as standard deviation error for recent predictions were made.
+    
+        \item (Desirable) The networks were tested against the baseline and their behaviour was examined before being used in the final implementation. All networks had an "accuracy" above 50\% on the test data however not all had a lower MSE than the baseline. These networks were still thought to be giving helpful predictions and so were used.
+    \end{enumerate}
+
+    \item \textbf{Webpage}
+    
+    \begin{enumerate}
+        \item Recent prices and predictions were displayed graphically on the site.
+        
+        \item Percentage accuracies and standard deviations were both displayed on the site graphically.
+        
+        \item The about page gave the user guidance on how the site should be used. The graphs/sliders and other elements were all named.
+    \end{enumerate}
+
+    \item \textbf{API}
+    
+    \begin{enumerate}
+        \item The API returned the same json file that is used by the website to display values graphically.
+        
+        \item The API "sign-up" page is quick and easy to use. Only an email is needed. New emails 
+        
+        \item User emails are stored by their hash - never stored in plaintext.
+
+        \item User emails are hashed client-side so they are not sent in plaintext.
+        
+        \item Inactive users are purged after a month.
+        
+        \item All user requests were stored in a database
+        
+        \item Daily metrics are calculated and outputted to the console at midnight.
+    
+    \end{enumerate}
+
+    \section{Comments on Predictions on Real-Time Data}
+    When the trained nets were moved over to the site and predictions were made/assessed, the performance of the networks was always lower than that observed when the networks were tested on the historic test data
+
+    There were a few reasons proposed as to why this could have been.
+    \begin{itemize}
+        \item \textbf{AlphaVantage only provides data to 4 d.p (1 pip) - } Given that price changes are very small (on the scale of 1/10 of a pip), it is possible that more precision was needed to be able to make effective predictions. Additionally, the networks were trained on data with 5 d.p.
+        \item \textbf{The nature of the market had changed - } The training data used spanned from 2010-2016 - it could be that the behaviour of the EUR/USD market has changed in the three years since, which would result in the network performing worse.
+        \item \textbf{The market was more volatile due to recent political uncertainty - } The final solution was finished within a week of the brexit deadline, which could have made price movements more extreme and thus harder to predict.
+    \end{itemize}
 
     \section{Future Improvements}
     
-    Assuming that the behaviour of all currency pairs are similar, predictions for different pairs could be added to the site and API without much extra overheard. This would greatly increase the usefulness of the solution to an actual end user, who would likely be trading multiple currency pairs at one time
+    Assuming that the behaviour of all currency pairs are similar, predictions for different pairs could be added to the site and API without much extra overheard. This would greatly increase the usefulness of the solution to an actual end user, who would likely be trading multiple currency pairs at one time.
 
         \subsection{Predictions}
         Even though the predictions passed the specified criteria, it was felt a lot more could be done to improve on them.
+
+        Without changing the network structures of outputs, more experimentation could be done during training. Batch size and learning rate were lowered for the networks making longer predictions out of necessity, however different values for both of these could be used deliberately to try to improve results. In addition, the number of training iterations (or epochs) used could be altered, e.g. using a much larger number of iterations, decreasing the learning-rate or increasing the batch size or using fewer training iterations (known as early stopping), a common technique for RNNs to help prevent overfitting on test data (although this did not appear to be a problem as ).
         
         There are many more approaches that could have been taken to predicting prices. The networks took in only the OHLC data, however other data such as the volume traded could also be useful to train the networks on as this could give a sense of the volatility at a given point in time, part of this was due to the limitations of AlphaVantage however, which only provides OHLC data.
 
@@ -23,3 +83,6 @@
         More could be done to the general apprearance of the site. The layout of the main page especially seems rather bare and patchy and generally the design feels outdated. Using 3rd patry style libraries such as Bootstrap could be a good solution for this.
 
         The price graph could definitely be improved on as well. Chart.js allowed displaying of historic data and predictions on one graph which was thought to be better for the user - giving a better feel for the data. However historic OHLC data is displayed as 3 separate line series, which is not common practice for financial data. In the future an OHLC bar chart or "Japanese candlestick" chart should be used instead as this would be a far more familiar graph format for users.
+
+    \section{Conclusion}
+    Overall, while there were some doubts about the predictions, the project was successful, achieving all mandatory specification points outlined in the analysis. What was perceived to be the low quantitative performance of the networks was justified by the stochastic nature of the market and any concerns regarding this were alleviated when observing the qualitative tests done on trends in 12.2.

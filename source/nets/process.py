@@ -7,7 +7,7 @@ from torch import autograd
 import random as r
 
 
-
+#read in all data from the given file path
 def readIn(dataPath):
     toReturn = []
 
@@ -21,7 +21,7 @@ def readIn(dataPath):
     return toReturn
 
 
-
+#get the targets for each set of inputs
 def getTargets(noPrev, toPredict, data):
 
     targets = []
@@ -34,7 +34,7 @@ def getTargets(noPrev, toPredict, data):
     return autograd.Variable(torch.tensor(targets).float())
 
 
-
+#get the mean of each window in the batch
 def getMeans(noPrev, toPredict, data):
 
     means = []
@@ -49,7 +49,9 @@ def getMeans(noPrev, toPredict, data):
     for i in range(0, len(data) - noPrev - toPredict + 1):
         #move the current window across 1
         if i > 0:
+            #take away the oldest timestep
             localTotal -= data[i-1][-1]
+        #add the next timestep
         localTotal += data[i+noPrev-1][-1]
 
         means.append([localTotal/noPrev])
@@ -57,12 +59,12 @@ def getMeans(noPrev, toPredict, data):
     return autograd.Variable(torch.tensor(means).float())
 
 
-
+#return raw data as torch tensor
 def getInputs(noPrev, toPredict, data):
     return autograd.Variable(torch.tensor(data[:len(data)-toPredict]))
 
 
-
+#normalise the inputs
 def prepareInputs(means, inputs, noPrev):
     
     batchIn = []
@@ -78,10 +80,10 @@ def prepareInputs(means, inputs, noPrev):
     return torch.stack(batchIn) * 100
 
 
-
+#get a batch 
 def getBatch(means, inputs, targets, noPrev):
     #take a proportion of the training data
-    batchProp = 0.05
+    batchProp = 0.5
     length = int(len(means)*batchProp)
     startIndex = r.randint(0, len(means) - length)
 
@@ -94,11 +96,11 @@ def getBatch(means, inputs, targets, noPrev):
     batchIns =  prepareInputs(batchMeans, splitEnd[2], noPrev)
     batchTargets = (splitEnd[4]-batchMeans)*100
 
-    #batchIns, batchTargets are "normalised"
+    #return batch of "normalised inputs/targets"
     return batchIns, batchTargets
 
 
-
+#split all data into training/testing batches
 def splitData(means, inputs, targets, noPrev):
     #split data into training/testing
     splitProp = 0.8
@@ -107,7 +109,7 @@ def splitData(means, inputs, targets, noPrev):
     return split(splitIndex, means, inputs, targets, noPrev)
 
 
-
+#return all data
 def get(noPrev, toPredict, dataPath):
     #get all data
 
@@ -125,7 +127,7 @@ def get(noPrev, toPredict, dataPath):
     return splitData(means, inputs, targets, noPrev)
 
 
-
+#split tensor at index windowNo 
 def split(windowNo, means, inputs, targets, noPrev):
     return means[:windowNo], means[windowNo:], inputs[:windowNo+noPrev-1], inputs[windowNo:], targets[:windowNo], targets[windowNo:]
 
